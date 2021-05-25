@@ -106,8 +106,58 @@ class AppDrawer extends StatelessWidget {
             size: 30,
           ),
           onTap: () {
+            final newRouteName = "/homeComptes";
+            bool isNewRouteSameAsCurrent = false;
             Navigator.pop(context);
+            Navigator.popUntil(context, (route) {
+              if (route.settings.name == newRouteName) {
+                isNewRouteSameAsCurrent = true;
+              }
+              return true;
+            });
+
+            if (!isNewRouteSameAsCurrent) {
+              Navigator.pushNamed(context, newRouteName);
+            }
           },
+        ),
+        ExpansionTile(
+          title: Text("Import/Export"),
+          leading: Icon(
+            Icons.import_export_rounded,
+            size: 30,
+          ),
+          children: <Widget>[
+            ListTile(
+              onTap: () {
+                final newRouteName = "/getAllImports";
+                bool isNewRouteSameAsCurrent = false;
+                Navigator.pop(context);
+                Navigator.popUntil(context, (route) {
+                  if (route.settings.name == newRouteName) {
+                    isNewRouteSameAsCurrent = true;
+                  }
+                  return true;
+                });
+
+                if (!isNewRouteSameAsCurrent) {
+                  Navigator.pushNamed(context, newRouteName);
+                }
+              },
+              title: Text("Les Achat"),
+              leading: Icon(
+                Icons.arrow_downward_rounded,
+                size: 30,
+              ),
+            ),
+            ListTile(
+              title: Text("Les Vents"),
+              leading: Icon(
+                Icons.arrow_upward_rounded,
+                size: 30,
+              ),
+            )
+          ],
         ),
         Row(
           children: [

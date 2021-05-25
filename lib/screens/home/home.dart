@@ -98,15 +98,15 @@ class HomeController extends State<Home> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          height: 95.0,
-                          width: 140.0,
+                          height: 85.0,
+                          width: 85.0,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                height: 65.0,
-                                width: 70.0,
+                                height: 55.0,
+                                width: 55.0,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                       image: AssetImage(
@@ -118,11 +118,11 @@ class HomeController extends State<Home> {
                                 ),
                               ),
                               Text(
-                                "NOMBRE D'ESPÈCES:",
+                                "ESPÈCES:",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 12.0,
-                                    fontWeight: FontWeight.w500),
+                                    fontWeight: FontWeight.w400),
                               )
                             ],
                           ),
@@ -131,7 +131,7 @@ class HomeController extends State<Home> {
                         Text(
                           countfish == null ? "0" : countfish,
                           style: TextStyle(
-                              fontSize: 25,
+                              fontSize: 23,
                               fontWeight: FontWeight.w400,
                               color: Colors.white),
                         )
@@ -143,15 +143,15 @@ class HomeController extends State<Home> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          height: 95.0,
-                          width: 140.0,
+                          height: 85.0,
+                          width: 85.0,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                height: 65.0,
-                                width: 70.0,
+                                height: 55.0,
+                                width: 55.0,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                       image: AssetImage(
@@ -163,11 +163,11 @@ class HomeController extends State<Home> {
                                 ),
                               ),
                               Text(
-                                "NOMBRE D'UTILISATEURS",
+                                "UTILISATEURS ACTIVES",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 13.0,
-                                    fontWeight: FontWeight.w500),
+                                    fontWeight: FontWeight.w400),
                               )
                             ],
                           ),
@@ -176,7 +176,7 @@ class HomeController extends State<Home> {
                         Text(
                           countuser == null ? "0" : countuser,
                           style: TextStyle(
-                              fontSize: 25,
+                              fontSize: 23,
                               fontWeight: FontWeight.w400,
                               color: Colors.white),
                         )
@@ -212,7 +212,7 @@ class HomeController extends State<Home> {
           ),
           Expanded(
             child: charts.BarChart(
-              chartData(stock.sublist(0, 5)),
+              chartData(stock.length > 5 ? stock.sublist(0, 5) : stock),
               animate: true,
               barRendererDecorator: globals.labelDecorator(),
               primaryMeasureAxis: globals.primaryAxisDecorator(),
@@ -220,7 +220,7 @@ class HomeController extends State<Home> {
           ),
           Expanded(
             child: charts.BarChart(
-              chartData(stock.sublist(5)),
+              chartData(stock.length > 5 ? stock.sublist(5) : stock),
               animate: true,
               barRendererDecorator: globals.labelDecorator(),
               primaryMeasureAxis: globals.primaryAxisDecorator(),
@@ -229,11 +229,14 @@ class HomeController extends State<Home> {
         ],
       );
     } else {
-      return new Visibility(
-          visible: visible,
-          child: Container(
-              margin: EdgeInsets.only(bottom: 10),
-              child: CircularProgressIndicator()));
+      return Center(
+          child: Visibility(
+              visible: visible,
+              child: Container(
+                  width: 69.0,
+                  height: 69.0,
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: CircularProgressIndicator())));
     }
   }
 }
