@@ -7,6 +7,20 @@ import "package:canpeches/globals.dart" as globals;
 // a simple Drawer with two items.
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key key}) : super(key: key);
+  newPushNamed(BuildContext context, String route) {
+    final newRouteName = route;
+    bool isNewRouteSameAsCurrent = false;
+    Navigator.pop(context);
+    Navigator.popUntil(context, (route) {
+      if (route.settings.name == newRouteName) {
+        isNewRouteSameAsCurrent = true;
+      }
+      return true;
+    });
+    if (!isNewRouteSameAsCurrent) {
+      Navigator.pushNamed(context, newRouteName);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,19 +60,7 @@ class AppDrawer extends StatelessWidget {
             size: 30,
           ),
           onTap: () {
-            final newRouteName = "/home";
-            bool isNewRouteSameAsCurrent = false;
-            Navigator.pop(context);
-            Navigator.popUntil(context, (route) {
-              if (route.settings.name == newRouteName) {
-                isNewRouteSameAsCurrent = true;
-              }
-              return true;
-            });
-
-            if (!isNewRouteSameAsCurrent) {
-              Navigator.pushReplacementNamed(context, newRouteName);
-            }
+            newPushNamed(context, "/home");
           },
         ),
         Row(
@@ -82,19 +84,7 @@ class AppDrawer extends StatelessWidget {
             size: 30,
           ),
           onTap: () {
-            final newRouteName = "/homePoissons";
-            bool isNewRouteSameAsCurrent = false;
-            Navigator.pop(context);
-            Navigator.popUntil(context, (route) {
-              if (route.settings.name == newRouteName) {
-                isNewRouteSameAsCurrent = true;
-              }
-              return true;
-            });
-
-            if (!isNewRouteSameAsCurrent) {
-              Navigator.pushNamed(context, newRouteName);
-            }
+            newPushNamed(context, "/homePoissons");
           },
         ),
         ListTile(
@@ -106,19 +96,7 @@ class AppDrawer extends StatelessWidget {
             size: 30,
           ),
           onTap: () {
-            final newRouteName = "/homeComptes";
-            bool isNewRouteSameAsCurrent = false;
-            Navigator.pop(context);
-            Navigator.popUntil(context, (route) {
-              if (route.settings.name == newRouteName) {
-                isNewRouteSameAsCurrent = true;
-              }
-              return true;
-            });
-
-            if (!isNewRouteSameAsCurrent) {
-              Navigator.pushNamed(context, newRouteName);
-            }
+            newPushNamed(context, "/homeComptes");
           },
         ),
         ExpansionTile(
@@ -130,19 +108,7 @@ class AppDrawer extends StatelessWidget {
           children: <Widget>[
             ListTile(
               onTap: () {
-                final newRouteName = "/getAllImports";
-                bool isNewRouteSameAsCurrent = false;
-                Navigator.pop(context);
-                Navigator.popUntil(context, (route) {
-                  if (route.settings.name == newRouteName) {
-                    isNewRouteSameAsCurrent = true;
-                  }
-                  return true;
-                });
-
-                if (!isNewRouteSameAsCurrent) {
-                  Navigator.pushNamed(context, newRouteName);
-                }
+                newPushNamed(context, "/getAllImports");
               },
               title: Text("Les Achat"),
               leading: Icon(
@@ -151,6 +117,9 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
             ListTile(
+              onTap: () {
+                newPushNamed(context, "/getAllExports");
+              },
               title: Text("Les Vents"),
               leading: Icon(
                 Icons.arrow_upward_rounded,
