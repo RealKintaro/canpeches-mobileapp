@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class Stockphysique {
   final String fishname;
   final double stocknumber;

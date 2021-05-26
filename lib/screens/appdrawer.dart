@@ -1,4 +1,3 @@
-import 'package:canpeches/screens/gestpoissons/homepoissons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import "package:canpeches/globals.dart" as globals;
