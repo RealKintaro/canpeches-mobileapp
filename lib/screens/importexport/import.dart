@@ -161,39 +161,50 @@ class GetAllImportsController extends State<GetAllImports> {
                     return Card(
                       child: Padding(
                         padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                        child: Row(
+                        child: Column(
                           children: [
-                            Container(
-                                width: MediaQuery.of(context).size.width / 6,
-                                child: Center(
-                                  child: Text(
-                                    achat[index]["date"],
-                                    style: TextStyle(
-                                      color: Colors.indigo[400],
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                )),
-                            Padding(padding: EdgeInsets.all(2.0)),
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 6 + 35,
-                                child: Center(
-                                  child: Text(
-                                    achat[index]["maryeur"],
-                                    style: TextStyle(
-                                      color: Colors.indigo[400],
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                )),
-                            Padding(padding: EdgeInsets.all(2.0)),
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 6 - 5,
-                                child: Center(
+                            Text(
+                              "Poisson: " + achat[index]["poisson"],
+                              style: TextStyle(
+                                color: Colors.indigo[900],
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 6,
+                                    child: Center(
+                                      child: Text(
+                                        achat[index]["date"],
+                                        style: TextStyle(
+                                          color: Colors.indigo[400],
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    )),
+                                Padding(padding: EdgeInsets.all(2.0)),
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 6 +
+                                            35,
+                                    child: Center(
+                                      child: Text(
+                                        achat[index]["maryeur"],
+                                        style: TextStyle(
+                                          color: Colors.indigo[400],
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    )),
+                                Padding(padding: EdgeInsets.all(2.0)),
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width / 6 - 5,
                                   child: Text(
                                     achat[index]["netat"],
                                     style: TextStyle(
@@ -202,49 +213,54 @@ class GetAllImportsController extends State<GetAllImports> {
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
-                                )),
-                            Padding(padding: EdgeInsets.all(2.0)),
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 6 - 20,
-                                child: Center(
-                                  child: Text(
-                                    achat[index]["qte"],
-                                    style: TextStyle(
-                                      color: Colors.indigo[400],
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                )),
-                            Padding(padding: EdgeInsets.all(2.0)),
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 6 - 20,
-                                child: Center(
-                                  child: Text(
-                                    achat[index]["rend"],
-                                    style: TextStyle(
-                                      color: Colors.indigo[400],
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                )),
-                            Padding(padding: EdgeInsets.all(2.0)),
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 6 - 20,
-                                child: Center(
-                                  child: Text(
-                                    achat[index]["poids"],
-                                    style: TextStyle(
-                                      color: Colors.indigo[400],
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                )),
+                                ),
+                                Padding(padding: EdgeInsets.all(2.0)),
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 6 -
+                                            18,
+                                    child: Center(
+                                      child: Text(
+                                        achat[index]["qte"],
+                                        style: TextStyle(
+                                          color: Colors.indigo[400],
+                                          fontSize: 13.0,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    )),
+                                Padding(padding: EdgeInsets.all(2.0)),
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 6 -
+                                            20,
+                                    child: Center(
+                                      child: Text(
+                                        achat[index]["rend"],
+                                        style: TextStyle(
+                                          color: Colors.indigo[400],
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    )),
+                                Padding(padding: EdgeInsets.all(2.0)),
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 6 -
+                                            20,
+                                    child: Center(
+                                      child: Text(
+                                        achat[index]["poids"],
+                                        style: TextStyle(
+                                          color: Colors.indigo[400],
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    )),
+                              ],
+                            ),
                           ],
                         ),
                       ),

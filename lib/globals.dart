@@ -4,7 +4,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-String globalurl = "https://canpeches.000webhostapp.com";
+String globalurl = "https://canpeches.000webhostapp.com/mobileapi";
 String userEmail = "";
 String userName = "";
 String poissonid, compteid = "";
