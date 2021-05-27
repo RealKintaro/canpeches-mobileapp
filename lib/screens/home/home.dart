@@ -93,6 +93,18 @@ class HomeController extends State<Home> {
         title: Text(
           "Page d'accueil",
         ),
+        actions: [
+          IconButton(
+            tooltip: "Deconnecter",
+            icon: const Icon(
+              Icons.power_settings_new_outlined,
+            ),
+            onPressed: () {
+              Navigator.pushReplacementNamed(
+                  context, Navigator.defaultRouteName);
+            },
+          ),
+        ],
       ),
       body: Container(
           width: MediaQuery.of(context).size.width,
