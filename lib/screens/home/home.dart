@@ -16,7 +16,7 @@ class HomeController extends State<Home> {
   bool showgraphs = false;
   bool visible = true;
 
-  String countfish, countuser = "0";
+  String countfish, countuser, countachats, countvents = "0";
   Future getPoissonsCount() async {
     var url = globals.globalurl + "/getPoissonsCount.php";
     http.Response response = await http.get(Uri.parse(url));
@@ -24,6 +24,24 @@ class HomeController extends State<Home> {
       poissonsCount = json.decode(response.body);
       countfish = poissonsCount[1]["countfish"];
       countuser = poissonsCount[0]["countuser"];
+    });
+  }
+
+  Future getAchatCount() async {
+    var url = globals.globalurl + "/getImportsCount.php";
+    http.Response response = await http.get(Uri.parse(url));
+    setState(() {
+      poissonsCount = json.decode(response.body);
+      countachats = poissonsCount[0]["countimports"];
+    });
+  }
+
+  Future getVentsCount() async {
+    var url = globals.globalurl + "/getExportsCount.php";
+    http.Response response = await http.get(Uri.parse(url));
+    setState(() {
+      poissonsCount = json.decode(response.body);
+      countvents = poissonsCount[0]["countexports"];
     });
   }
 
@@ -60,6 +78,8 @@ class HomeController extends State<Home> {
   void initState() {
     super.initState();
     getPoissonsCount();
+    getAchatCount();
+    getVentsCount();
     getStock();
 
     AppDrawer();
@@ -99,7 +119,7 @@ class HomeController extends State<Home> {
                       children: [
                         Container(
                           height: 85.0,
-                          width: 85.0,
+                          width: MediaQuery.of(context).size.width / 2 - 70,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,7 +154,46 @@ class HomeController extends State<Home> {
                               fontSize: 23,
                               fontWeight: FontWeight.w400,
                               color: Colors.white),
-                        )
+                        ),
+                        Padding(padding: EdgeInsets.all(25.0)),
+                        Container(
+                          height: 85.0,
+                          width: MediaQuery.of(context).size.width / 2 - 70,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 55.0,
+                                width: 55.0,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                        "assets/images/import.png",
+                                      ),
+                                      fit: BoxFit.fill),
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              Text(
+                                "Les Achats:",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w400),
+                              )
+                            ],
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.all(5.0)),
+                        Text(
+                          countfish == null ? "0" : countachats,
+                          style: TextStyle(
+                              fontSize: 23,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white),
+                        ),
                       ],
                     ),
                     Padding(padding: EdgeInsets.all(10.0)),
@@ -144,7 +203,7 @@ class HomeController extends State<Home> {
                       children: [
                         Container(
                           height: 85.0,
-                          width: 85.0,
+                          width: MediaQuery.of(context).size.width / 2 - 70,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -175,6 +234,45 @@ class HomeController extends State<Home> {
                         Padding(padding: EdgeInsets.all(5.0)),
                         Text(
                           countuser == null ? "0" : countuser,
+                          style: TextStyle(
+                              fontSize: 23,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white),
+                        ),
+                        Padding(padding: EdgeInsets.all(25.0)),
+                        Container(
+                          height: 85.0,
+                          width: MediaQuery.of(context).size.width / 2 - 70,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 55.0,
+                                width: 55.0,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                        "assets/images/export.png",
+                                      ),
+                                      fit: BoxFit.fill),
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              Text(
+                                "Les Vents",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13.0,
+                                    fontWeight: FontWeight.w400),
+                              )
+                            ],
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.all(5.0)),
+                        Text(
+                          countuser == null ? "0" : countvents,
                           style: TextStyle(
                               fontSize: 23,
                               fontWeight: FontWeight.w400,
