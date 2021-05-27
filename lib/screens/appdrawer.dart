@@ -148,7 +148,7 @@ class AppDrawer extends StatelessWidget {
             size: 30,
           ),
           onTap: () {
-            Navigator.pop(context);
+            newPushNamed(context, "/getHistoriqueComptes");
           },
         ),
         ListTile(
@@ -160,7 +160,7 @@ class AppDrawer extends StatelessWidget {
             size: 30,
           ),
           onTap: () {
-            Navigator.pop(context);
+            newPushNamed(context, "/getHistoriqueOperations");
           },
         ),
       ],

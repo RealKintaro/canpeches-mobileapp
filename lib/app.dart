@@ -1,3 +1,5 @@
+import 'package:canpeches/historique/historiquecomptes.dart';
+import 'package:canpeches/historique/historiqueoperations.dart';
 import 'package:canpeches/screens/gestcomptes/homecomptes.dart';
 import 'package:canpeches/screens/gestpoissons/gestpoissons.dart';
 import 'package:canpeches/screens/gestpoissons/homepoissons.dart';
@@ -20,6 +22,10 @@ class App extends StatelessWidget {
         '/homeComptes': (BuildContext context) => new HomeComptes(),
         '/getAllImports': (BuildContext context) => new GetAllImports(),
         '/getAllExports': (BuildContext context) => new GetAllExports(),
+        '/getHistoriqueComptes': (BuildContext context) =>
+            new HistoriqueComptes(),
+        '/getHistoriqueOperations': (BuildContext context) =>
+            new HistoriqueOperations(),
       },
     );
   }
