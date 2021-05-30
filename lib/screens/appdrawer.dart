@@ -163,6 +163,16 @@ class AppDrawer extends StatelessWidget {
             newPushNamed(context, "/getHistoriqueOperations");
           },
         ),
+        ListTile(
+          title: Text("Historique des connections"),
+          leading: const Icon(
+            Icons.history,
+            size: 30,
+          ),
+          onTap: () {
+            newPushNamed(context, '/getHistoriqueConnections');
+          },
+        )
       ],
     );
     return Drawer(

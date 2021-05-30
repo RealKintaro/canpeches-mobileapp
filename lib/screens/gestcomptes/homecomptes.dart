@@ -9,6 +9,7 @@ class HomeComptes extends StatefulWidget {
 }
 
 class HomeComptesController extends State<HomeComptes> {
+  bool _obscureText = true;
   List comptes;
   bool visible = true;
   Future getComptes() async {
@@ -61,140 +62,215 @@ class HomeComptesController extends State<HomeComptes> {
                               new AlwaysStoppedAnimation<Color>(Colors.white),
                         ))))
             : ListView.builder(
-                itemCount: comptes == null ? 1 : comptes.length + 1,
+                itemCount: comptes == null ? 0 : comptes.length,
                 itemBuilder: (BuildContext context, int index) {
-                  if (index == 0) {
-                    return Card(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width / 4 - 10,
-                              child: Center(
-                                child: Text("NOM",
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black,
-                                    )),
-                              ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 4 - 10,
-                              child: Center(
-                                child: Text("PRENOM",
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black,
-                                    )),
-                              ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 4 + 40,
-                              child: Center(
-                                child: Text("EMAIL",
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black,
-                                    )),
-                              ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 4 - 30,
-                              child: Center(
-                                child: Text("ETAT",
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black,
-                                    )),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }
-                  index -= 1;
                   return GestureDetector(
-                    onTap: () {
+                    onLongPress: () {
                       globals.compteid = comptes[index]["id"];
                     },
                     child: Card(
                       child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width / 4 - 23,
-                              child: Text(
-                                comptes[index]["nom"],
-                                style: TextStyle(
-                                  color: Colors.indigo[400],
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Nom et Prenom: ",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Padding(padding: EdgeInsets.only(right: 5.0)),
+                                  Text(
+                                    comptes[index]["nom"],
+                                    style: TextStyle(
+                                      color: Colors.indigo[400],
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Padding(padding: EdgeInsets.only(right: 2.5)),
+                                  Text(
+                                    comptes[index]["prenom"],
+                                    style: TextStyle(
+                                      color: Colors.indigo[400],
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Padding(padding: EdgeInsets.all(2.0)),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 4 - 23,
-                              child: Text(
-                                comptes[index]["prenom"],
-                                style: TextStyle(
-                                  color: Colors.indigo[400],
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                              Padding(padding: EdgeInsets.all(3.0)),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Email:",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Padding(padding: EdgeInsets.only(right: 5.0)),
+                                  Text(
+                                    comptes[index]["email"],
+                                    style: TextStyle(
+                                      color: Colors.indigo[400],
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Padding(padding: EdgeInsets.all(2.0)),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 4 + 55,
-                              child: Text(
-                                comptes[index]["email"],
-                                style: TextStyle(
-                                  color: Colors.indigo[400],
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                            Padding(padding: EdgeInsets.all(2.0)),
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 4 - 50,
-                                child: Center(
-                                  child: comptes[index]["etat"] == "1"
+                              Padding(padding: EdgeInsets.all(3.0)),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Etat:",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Padding(padding: EdgeInsets.only(right: 5.0)),
+                                  comptes[index]["etat"] == "1"
                                       ? Text(
-                                          "Act",
+                                          "Active",
                                           style: TextStyle(
                                             color: Colors.greenAccent[400],
-                                            fontSize: 13.0,
+                                            fontSize: 14.0,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         )
                                       : Text(
-                                          "Des",
+                                          "Desactive",
                                           style: TextStyle(
                                             color: Colors.red[800],
-                                            fontSize: 12.0,
+                                            fontSize: 14.0,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                )),
-                          ],
-                        ),
-                      ),
+                                ],
+                              ),
+                            ],
+                          )),
                     ),
                   );
                 },
               ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          popUp();
+        },
+        child: Icon(
+          Icons.add,
+          size: 30,
+        ),
+      ),
       drawer: AppDrawer(),
     );
+  }
+
+  popUp() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                width: 300.0,
+                child: Stack(
+                  children: <Widget>[
+                    Form(
+                        child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Center(
+                            child: Text("Ajouter un compte"),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Nom',
+                                  suffixIcon: Icon(
+                                    Icons.email,
+                                    size: 17,
+                                  )),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Prenom',
+                                  suffixIcon: Icon(
+                                    Icons.email,
+                                    size: 17,
+                                  )),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Email',
+                                  suffixIcon: Icon(
+                                    Icons.email,
+                                    size: 17,
+                                  )),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: TextFormField(
+                                obscureText: _obscureText,
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Password',
+                                    suffixIcon: IconButton(
+                                        icon: Icon(_obscureText
+                                            ? Icons.visibility
+                                            : Icons.visibility_off),
+                                        onPressed: () {
+                                          setState(() {
+                                            _obscureText = !_obscureText;
+                                          });
+                                        }))),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: ElevatedButton.icon(
+                              onPressed: (() {}),
+                              icon: Icon(Icons.person_add),
+                              label: Text("Ajouter"),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.indigo[400],
+                                shape: const BeveledRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5))),
+                                elevation: 5,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )),
+                  ],
+                )),
+          );
+        });
   }
 }

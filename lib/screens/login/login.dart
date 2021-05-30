@@ -201,7 +201,28 @@ class LoginController extends State<Login> {
                                     }))),
                       ),
                       SizedBox(
-                        height: 30.0,
+                        height: 5.0,
+                      ),
+                      Row(
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  right:
+                                      MediaQuery.of(context).size.width - 200)),
+                          GestureDetector(
+                            child: Text(
+                              "Mot de pass oubliee?",
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors.indigo[600],
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            onTap: () {},
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5.0,
                       ),
                       ElevatedButton.icon(
                         onPressed: (() => login()),

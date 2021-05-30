@@ -10,6 +10,8 @@ class GestPoissons extends StatefulWidget {
 }
 
 class GestPoissonsController extends State<GestPoissons> {
+  final RestorableInt tabIndex = RestorableInt(0);
+
   List achat, vent;
   bool visible = true;
   Future getStockPoisson() async {
@@ -33,51 +35,62 @@ class GestPoissonsController extends State<GestPoissons> {
 
   @override
   void initState() {
-    super.initState();
     getStockPoisson();
     getventPoisson();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.indigo[900],
-        title: Text(
-          "Gestion Poissons",
-        ),
-        actions: [
-          IconButton(
-            tooltip: "Recherche",
-            icon: const Icon(
-              Icons.search,
+    return MaterialApp(
+      home: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.indigo[900],
+            title: Text(
+              "Gestion Poissons",
             ),
-            onPressed: () {},
+            actions: [
+              IconButton(
+                tooltip: "Recherche",
+                icon: const Icon(
+                  Icons.search,
+                ),
+                onPressed: () {},
+              ),
+            ],
+            bottom: TabBar(
+              tabs: [
+                Tab(
+                  child: Text("Achats"),
+                ),
+                Tab(
+                  child: Text("Vents"),
+                ),
+              ],
+            ),
           ),
-        ],
-      ),
-      body: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          decoration: globals.background(),
-          child: visible
-              ? Center(
-                  child: Visibility(
-                      visible: visible,
-                      child: Container(
-                          height: 69.0,
-                          width: 69.0,
-                          margin: EdgeInsets.only(bottom: 10),
-                          child: CircularProgressIndicator(
-                            valueColor:
-                                new AlwaysStoppedAnimation<Color>(Colors.white),
-                          ))))
-              : Column(
-                  children: [
-                    Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height / 2 - 70,
-                        child: Column(
+          body: TabBarView(
+            children: [
+              Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: globals.background(),
+                  child: visible
+                      ? Center(
+                          child: Visibility(
+                              visible: visible,
+                              child: Container(
+                                  height: 69.0,
+                                  width: 69.0,
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  child: CircularProgressIndicator(
+                                    valueColor:
+                                        new AlwaysStoppedAnimation<Color>(
+                                            Colors.white),
+                                  ))))
+                      : Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -329,11 +342,24 @@ class GestPoissonsController extends State<GestPoissons> {
                             )),
                           ],
                         )),
-                    Padding(padding: EdgeInsets.all(5.0)),
-                    Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height / 2 - 30,
-                        child: Column(
+              Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: globals.background(),
+                  child: visible
+                      ? Center(
+                          child: Visibility(
+                              visible: visible,
+                              child: Container(
+                                  height: 69.0,
+                                  width: 69.0,
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  child: CircularProgressIndicator(
+                                    valueColor:
+                                        new AlwaysStoppedAnimation<Color>(
+                                            Colors.white),
+                                  ))))
+                      : Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -553,9 +579,11 @@ class GestPoissonsController extends State<GestPoissons> {
                             )),
                           ],
                         )),
-                  ],
-                )),
-      drawer: AppDrawer(),
+            ],
+          ),
+          drawer: AppDrawer(),
+        ),
+      ),
     );
   }
 }
