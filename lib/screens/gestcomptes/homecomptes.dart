@@ -9,8 +9,8 @@ class HomeComptes extends StatefulWidget {
 }
 
 class HomeComptesController extends State<HomeComptes> {
-  bool _obscureText = true;
   List comptes;
+
   bool visible = true;
   Future getComptes() async {
     var url = globals.globalurl + "/getComptes.php";
@@ -35,15 +35,7 @@ class HomeComptesController extends State<HomeComptes> {
         title: Text(
           "Comptes",
         ),
-        actions: [
-          IconButton(
-            tooltip: "Recherche",
-            icon: const Icon(
-              Icons.search,
-            ),
-            onPressed: () {},
-          ),
-        ],
+        actions: [],
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -65,8 +57,15 @@ class HomeComptesController extends State<HomeComptes> {
                 itemCount: comptes == null ? 0 : comptes.length,
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
-                    onLongPress: () {
-                      globals.compteid = comptes[index]["id"];
+                    onTap: () {
+                      globals.compteInfo = {
+                        'id': comptes[index]["id"],
+                        'nom': comptes[index]["nom"],
+                        'prenom': comptes[index]["prenom"],
+                        'email': comptes[index]["email"],
+                        'etat': comptes[index]["etat"]
+                      };
+                      Navigator.pushNamed(context, '/gestCompte');
                     },
                     child: Card(
                       child: Padding(
@@ -165,7 +164,10 @@ class HomeComptesController extends State<HomeComptes> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          popUp();
+          Navigator.pushNamed(context, "/addCompte");
+          setState(() {
+            getComptes();
+          });
         },
         child: Icon(
           Icons.add,
@@ -174,103 +176,5 @@ class HomeComptesController extends State<HomeComptes> {
       ),
       drawer: AppDrawer(),
     );
-  }
-
-  popUp() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                width: 300.0,
-                child: Stack(
-                  children: <Widget>[
-                    Form(
-                        child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Center(
-                            child: Text("Ajouter un compte"),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(5.0),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Nom',
-                                  suffixIcon: Icon(
-                                    Icons.email,
-                                    size: 17,
-                                  )),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(5.0),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Prenom',
-                                  suffixIcon: Icon(
-                                    Icons.email,
-                                    size: 17,
-                                  )),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(5.0),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Email',
-                                  suffixIcon: Icon(
-                                    Icons.email,
-                                    size: 17,
-                                  )),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(5.0),
-                            child: TextFormField(
-                                obscureText: _obscureText,
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'Password',
-                                    suffixIcon: IconButton(
-                                        icon: Icon(_obscureText
-                                            ? Icons.visibility
-                                            : Icons.visibility_off),
-                                        onPressed: () {
-                                          setState(() {
-                                            _obscureText = !_obscureText;
-                                          });
-                                        }))),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: ElevatedButton.icon(
-                              onPressed: (() {}),
-                              icon: Icon(Icons.person_add),
-                              label: Text("Ajouter"),
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.indigo[400],
-                                shape: const BeveledRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5))),
-                                elevation: 5,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    )),
-                  ],
-                )),
-          );
-        });
   }
 }

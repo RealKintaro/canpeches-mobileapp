@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 String globalurl = "https://canpeches.000webhostapp.com/mobileapi";
 String userEmail = "";
 String userName = "";
-String poissonid, compteid = "";
-
+String poissonid = "";
+Map compteInfo;
 BoxDecoration background() {
   return BoxDecoration(
       gradient: LinearGradient(

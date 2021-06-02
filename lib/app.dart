@@ -1,3 +1,5 @@
+import 'package:canpeches/screens/gestcomptes/addcompte.dart';
+import 'package:canpeches/screens/gestcomptes/gestcompte.dart';
 import 'package:canpeches/screens/historique/historiquecomptes.dart';
 import 'package:canpeches/screens/historique/historiqueconnections.dart';
 import 'package:canpeches/screens/historique/historiqueoperations.dart';
@@ -29,6 +31,8 @@ class App extends StatelessWidget {
             new HistoriqueOperations(),
         '/getHistoriqueConnections': (BuildContext context) =>
             new HistoriqueConnection(),
+        '/addCompte': (BuildContext context) => new AddCompte(),
+        '/gestCompte': (BuildContext context) => new GestCompte(),
       },
     );
   }

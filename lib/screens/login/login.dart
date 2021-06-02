@@ -11,6 +11,7 @@ class Login extends StatefulWidget {
 }
 
 class LoginController extends State<Login> {
+  bool setErrorMail = false, setErrorPass = false;
   TextEditingController controllerMail = new TextEditingController();
   TextEditingController controllerPass = new TextEditingController();
   List lresponse;
@@ -34,6 +35,10 @@ class LoginController extends State<Login> {
 
     if (emailValid) {
       if (password != "") {
+        setState(() {
+          setErrorMail = false;
+          setErrorPass = false;
+        });
         var data = {'email': email, 'password': password};
 
         var response = await http.post(Uri.parse(url), body: json.encode(data));
@@ -47,7 +52,7 @@ class LoginController extends State<Login> {
           setState(() {
             visible = false;
           });
-          // Navigate to Profile Screen & Sending Email to Next Screen.
+
           Navigator.pushReplacementNamed(context, "/home");
         } else {
           // If Email or Password did not Matched.
@@ -74,42 +79,15 @@ class LoginController extends State<Login> {
       } else {
         setState(() {
           visible = false;
+          setErrorPass = true;
+          setErrorMail = false;
         });
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: new Text("Remplire le password"),
-                actions: <Widget>[
-                  TextButton(
-                    child: new Text("OK"),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            });
       }
     } else {
       setState(() {
         visible = false;
+        setErrorMail = true;
       });
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: new Text("Email invalid"),
-              actions: <Widget>[
-                TextButton(
-                  child: new Text("OK"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          });
     }
   } //Login func
 
@@ -173,6 +151,8 @@ class LoginController extends State<Login> {
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               labelText: 'Email',
+                              errorText:
+                                  setErrorMail ? "Email invalide." : null,
                               suffixIcon: Icon(
                                 FontAwesomeIcons.envelope,
                                 size: 17,
@@ -189,7 +169,10 @@ class LoginController extends State<Login> {
                             obscureText: _obscureText,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                labelText: 'Password',
+                                labelText: 'Mot de pass',
+                                errorText: setErrorPass
+                                    ? "Remplire le mot de pass."
+                                    : null,
                                 suffixIcon: IconButton(
                                     icon: Icon(_obscureText
                                         ? Icons.visibility
@@ -201,28 +184,7 @@ class LoginController extends State<Login> {
                                     }))),
                       ),
                       SizedBox(
-                        height: 5.0,
-                      ),
-                      Row(
-                        children: [
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  right:
-                                      MediaQuery.of(context).size.width - 200)),
-                          GestureDetector(
-                            child: Text(
-                              "Mot de pass oubliee?",
-                              style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.indigo[600],
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            onTap: () {},
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5.0,
+                        height: 10.0,
                       ),
                       ElevatedButton.icon(
                         onPressed: (() => login()),

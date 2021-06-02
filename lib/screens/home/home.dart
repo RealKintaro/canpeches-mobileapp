@@ -16,7 +16,7 @@ class HomeController extends State<Home> {
   bool showgraphs = false;
   bool visible = true;
 
-  String countfish, countuser, countachats, countvents = "0";
+  String countfish = "0", countuser = "0", countachats = "0", countvents = "0";
   Future getPoissonsCount() async {
     var url = globals.globalurl + "/getPoissonsCount.php";
     http.Response response = await http.get(Uri.parse(url));
