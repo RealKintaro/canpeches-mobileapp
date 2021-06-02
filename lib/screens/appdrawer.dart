@@ -99,7 +99,7 @@ class AppDrawer extends StatelessWidget {
           },
         ),
         ExpansionTile(
-          title: Text("Import/Export"),
+          title: Text("Achats/Vents"),
           leading: Icon(
             Icons.import_export_rounded,
             size: 30,

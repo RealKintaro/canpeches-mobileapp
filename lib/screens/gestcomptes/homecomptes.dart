@@ -65,7 +65,7 @@ class HomeComptesController extends State<HomeComptes> {
                         'email': comptes[index]["email"],
                         'etat': comptes[index]["etat"]
                       };
-                      Navigator.pushNamed(context, '/gestCompte');
+                      Navigator.pushReplacementNamed(context, '/gestCompte');
                     },
                     child: Card(
                       child: Padding(

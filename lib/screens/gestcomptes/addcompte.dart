@@ -82,7 +82,7 @@ class AddCompteController extends State<AddCompte> {
         appBar: AppBar(
           backgroundColor: Colors.indigo[900],
           title: Text(
-            "Add compte",
+            "Ajout du compte",
           ),
           actions: [],
         ),
