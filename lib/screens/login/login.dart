@@ -14,20 +14,20 @@ class LoginController extends State<Login> {
   bool setErrorMail = false, setErrorPass = false;
   TextEditingController controllerMail = new TextEditingController();
   TextEditingController controllerPass = new TextEditingController();
-  List lresponse;
+  List? lresponse;
   // For CircularProgressIndicator.
   bool visible = false;
 
   var url = globals.globalurl + "/loginback.php";
 
-  Future login() async {
+  login(String mail, String pass) async {
     // Showing CircularProgressIndicator.
     setState(() {
       visible = true;
     });
 
-    String email = controllerMail.text;
-    String password = controllerPass.text;
+    String email = mail;
+    String password = pass;
 
     bool emailValid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -44,26 +44,26 @@ class LoginController extends State<Login> {
         var response = await http.post(Uri.parse(url), body: json.encode(data));
 
         lresponse = jsonDecode(response.body);
-        if (lresponse[0]["res"] == 'Login Matched') {
+        if (lresponse![0]["res"] == 'Login Matched') {
           // Hiding the CircularProgressIndicator.
           globals.userEmail = email;
           globals.userName =
-              lresponse[0]["lastname"] + " " + lresponse[0]["firstname"];
-          setState(() {
-            visible = false;
-          });
+              lresponse![0]["lastname"] + " " + lresponse![0]["firstname"];
 
-          Navigator.pushReplacementNamed(context, "/home");
+          visible = false;
+          if (mounted) {
+            Navigator.pushReplacementNamed(context, "/home");
+          }
         } else {
           // If Email or Password did not Matched.
-          setState(() {
-            visible = false;
-          });
+
+          visible = false;
+
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                title: new Text(lresponse[0]["res"]),
+                title: new Text(lresponse![0]["res"]),
                 actions: <Widget>[
                   TextButton(
                     child: new Text("OK"),
@@ -125,81 +125,124 @@ class LoginController extends State<Login> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Visibility(
+                  child: visible
+                      ? Visibility(
                           visible: visible,
                           child: Container(
                               margin: EdgeInsets.only(bottom: 10),
-                              child: CircularProgressIndicator())),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text(
-                        'Bonjour',
-                        style: TextStyle(
-                            fontSize: 35.0, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        width: 280.0,
-                        child: TextFormField(
-                          controller: controllerMail,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Email',
-                              errorText:
-                                  setErrorMail ? "Email invalide." : null,
-                              suffixIcon: Icon(
-                                FontAwesomeIcons.envelope,
-                                size: 17,
-                              )),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        width: 280.0,
-                        child: TextFormField(
-                            controller: controllerPass,
-                            obscureText: _obscureText,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Mot de pass',
-                                errorText: setErrorPass
-                                    ? "Remplire le mot de pass."
-                                    : null,
-                                suffixIcon: IconButton(
-                                    icon: Icon(_obscureText
-                                        ? Icons.visibility
-                                        : Icons.visibility_off),
-                                    onPressed: () {
-                                      setState(() {
-                                        _obscureText = !_obscureText;
-                                      });
-                                    }))),
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: (() => login()),
-                        icon: Icon(Icons.login),
-                        label: Text("Se connecter"),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.indigo[400],
-                          shape: const BeveledRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5))),
-                          elevation: 5,
-                        ),
-                      ),
-                    ],
-                  )),
+                              child: CircularProgressIndicator()))
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              'Bonjour',
+                              style: TextStyle(
+                                  fontSize: 35.0, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              width: 280.0,
+                              child: TextFormField(
+                                controller: controllerMail,
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: 'Email',
+                                    errorText:
+                                        setErrorMail ? "Email invalide." : null,
+                                    suffixIcon: Icon(
+                                      FontAwesomeIcons.envelope,
+                                      size: 17,
+                                    )),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: 280.0,
+                              child: TextFormField(
+                                  controller: controllerPass,
+                                  obscureText: _obscureText,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: 'Mot de pass',
+                                      errorText: setErrorPass
+                                          ? "Remplire le mot de pass."
+                                          : null,
+                                      suffixIcon: IconButton(
+                                          icon: Icon(_obscureText
+                                              ? Icons.visibility
+                                              : Icons.visibility_off),
+                                          onPressed: () {
+                                            setState(() {
+                                              _obscureText = !_obscureText;
+                                            });
+                                          }))),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            ElevatedButton.icon(
+                              onPressed: (() => login(
+                                  controllerMail.text, controllerPass.text)),
+                              icon: Icon(Icons.login),
+                              label: Text("Se connecter"),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.indigo[400],
+                                shape: const BeveledRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5))),
+                                elevation: 5,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 3.0,
+                            ),
+                            ElevatedButton.icon(
+                              onPressed: (() {
+                                Navigator.pushNamed(context, "/qrCode")
+                                    .then((value) {
+                                  if (globals.userEmail.trim() != "" &&
+                                      globals.userPass.trim() != "") {
+                                    login(globals.userEmail.trim(),
+                                        globals.userPass.trim());
+                                  } else {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: new Text("Qr code invalid"),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              child: new Text("OK"),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+                                });
+                              }),
+                              icon: Icon(Icons.qr_code_scanner),
+                              label: Text("Qr Code"),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.indigo[400],
+                                shape: const BeveledRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5))),
+                                elevation: 5,
+                              ),
+                            ),
+                          ],
+                        )),
             ],
           )),
     ));

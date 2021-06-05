@@ -9,7 +9,7 @@ class HomeComptes extends StatefulWidget {
 }
 
 class HomeComptesController extends State<HomeComptes> {
-  List comptes;
+  late List comptes;
 
   bool visible = true;
   Future getComptes() async {
@@ -54,7 +54,7 @@ class HomeComptesController extends State<HomeComptes> {
                               new AlwaysStoppedAnimation<Color>(Colors.white),
                         ))))
             : ListView.builder(
-                itemCount: comptes == null ? 0 : comptes.length,
+                itemCount: comptes.length,
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
                     onTap: () {

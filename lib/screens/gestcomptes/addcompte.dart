@@ -19,7 +19,7 @@ class AddCompteController extends State<AddCompte> {
       setErrorNom = false,
       setErrorPrenom = false;
 
-  String resaddmsg;
+  late String resaddmsg;
 
   Future<String> ajouterCompte() async {
     String email, password, nom, prenom;
@@ -73,7 +73,7 @@ class AddCompteController extends State<AddCompte> {
         setErrorNom = true;
       });
     }
-    return null;
+    return "";
   }
 
   @override

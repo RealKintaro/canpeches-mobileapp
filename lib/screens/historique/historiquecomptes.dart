@@ -9,7 +9,7 @@ class HistoriqueComptes extends StatefulWidget {
 }
 
 class HistoriqueComptesController extends State<HistoriqueComptes> {
-  List historiqueCompte;
+  late List historiqueCompte;
   bool visible = true;
   Future getHistoriqueCompte() async {
     var url = globals.globalurl + "/getHistoriqueComptes.php";
@@ -55,8 +55,7 @@ class HistoriqueComptesController extends State<HistoriqueComptes> {
                               new AlwaysStoppedAnimation<Color>(Colors.white),
                         ))))
             : ListView.builder(
-                itemCount:
-                    historiqueCompte == null ? 0 : historiqueCompte.length,
+                itemCount: historiqueCompte.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Card(
                     child: Padding(

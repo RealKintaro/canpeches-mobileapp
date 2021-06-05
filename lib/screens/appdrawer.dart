@@ -5,7 +5,6 @@ import "package:canpeches/globals.dart" as globals;
 // Press the Navigation Drawer button to the left of AppBar to show
 // a simple Drawer with two items.
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({Key key}) : super(key: key);
   newPushNamed(BuildContext context, String route) {
     final newRouteName = route;
     bool isNewRouteSameAsCurrent = false;

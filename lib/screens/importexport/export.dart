@@ -10,7 +10,7 @@ class GetAllExports extends StatefulWidget {
 }
 
 class GetAllExportsController extends State<GetAllExports> {
-  List vents;
+  late List vents;
   bool visible = true;
   Future getAllImportPoisson() async {
     var url = globals.globalurl + "/getAllExports.php";
@@ -65,7 +65,7 @@ class GetAllExportsController extends State<GetAllExports> {
             : Expanded(
                 child: Container(
                 child: ListView.builder(
-                  itemCount: vents == null ? 1 : vents.length + 1,
+                  itemCount: vents.length + 1,
                   itemBuilder: (BuildContext context, int index) {
                     if (index == 0) {
                       // return the header

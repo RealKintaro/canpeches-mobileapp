@@ -10,7 +10,7 @@ class GestPoissons extends StatefulWidget {
 }
 
 class GestPoissonsController extends State<GestPoissons> {
-  List achat, vent;
+  late List achat, vent;
   bool visible = true;
   Future getStockPoisson() async {
     var url = globals.globalurl + "/getStockPoisson.php";
@@ -107,7 +107,7 @@ class GestPoissonsController extends State<GestPoissons> {
                           Expanded(
                               child: Container(
                             child: ListView.builder(
-                              itemCount: achat == null ? 1 : achat.length + 1,
+                              itemCount: achat.length + 1,
                               itemBuilder: (BuildContext context, int index) {
                                 if (index == 0) {
                                   // return the header
@@ -369,7 +369,7 @@ class GestPoissonsController extends State<GestPoissons> {
                           Expanded(
                               child: Container(
                             child: ListView.builder(
-                              itemCount: vent == null ? 1 : vent.length + 1,
+                              itemCount: vent.length + 1,
                               itemBuilder: (BuildContext context, int index) {
                                 if (index == 0) {
                                   // return the header

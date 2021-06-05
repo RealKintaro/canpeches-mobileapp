@@ -4,6 +4,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:canpeches/globals.dart' as globals;
 import 'package:http/http.dart' as http;
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'dart:convert';
 
 class Home extends StatefulWidget {
@@ -11,7 +12,7 @@ class Home extends StatefulWidget {
 }
 
 class HomeController extends State<Home> {
-  List poissonsCount;
+  late List poissonsCount;
   List<Stockphysique> stock = [];
   bool showgraphs = false;
   bool visible = true;
@@ -100,8 +101,8 @@ class HomeController extends State<Home> {
               Icons.power_settings_new_outlined,
             ),
             onPressed: () {
-              Navigator.pushReplacementNamed(
-                  context, Navigator.defaultRouteName);
+              Navigator.pop(context);
+              Phoenix.rebirth(context);
             },
           ),
         ],
@@ -161,7 +162,7 @@ class HomeController extends State<Home> {
                         ),
                         Padding(padding: EdgeInsets.all(5.0)),
                         Text(
-                          countfish == null ? "0" : countfish,
+                          countfish,
                           style: TextStyle(
                               fontSize: 23,
                               fontWeight: FontWeight.w400,
@@ -200,7 +201,7 @@ class HomeController extends State<Home> {
                         ),
                         Padding(padding: EdgeInsets.all(5.0)),
                         Text(
-                          countfish == null ? "0" : countachats,
+                          countachats,
                           style: TextStyle(
                               fontSize: 23,
                               fontWeight: FontWeight.w400,
@@ -245,7 +246,7 @@ class HomeController extends State<Home> {
                         ),
                         Padding(padding: EdgeInsets.all(5.0)),
                         Text(
-                          countuser == null ? "0" : countuser,
+                          countuser,
                           style: TextStyle(
                               fontSize: 23,
                               fontWeight: FontWeight.w400,
@@ -284,7 +285,7 @@ class HomeController extends State<Home> {
                         ),
                         Padding(padding: EdgeInsets.all(5.0)),
                         Text(
-                          countuser == null ? "0" : countvents,
+                          countvents,
                           style: TextStyle(
                               fontSize: 23,
                               fontWeight: FontWeight.w400,

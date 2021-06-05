@@ -10,7 +10,7 @@ class HistoriqueConnection extends StatefulWidget {
 }
 
 class HistoriqueConnectionController extends State<HistoriqueConnection> {
-  List historiqueConnection;
+  late List historiqueConnection;
   bool visible = true;
   Future getHistoriqueCompte() async {
     var url = globals.globalurl + "/getHistoriqueConnections.php";
@@ -56,9 +56,7 @@ class HistoriqueConnectionController extends State<HistoriqueConnection> {
                               new AlwaysStoppedAnimation<Color>(Colors.white),
                         ))))
             : ListView.builder(
-                itemCount: historiqueConnection == null
-                    ? 0
-                    : historiqueConnection.length,
+                itemCount: historiqueConnection.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Card(
                     child: Padding(

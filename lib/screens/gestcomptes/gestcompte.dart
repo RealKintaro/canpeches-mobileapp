@@ -30,8 +30,8 @@ class GestCompteController extends State<GestCompte> {
       setErrorPrenom = false,
       visible = true;
 
-  String resaddmsg;
-  List compteCounts;
+  late String resaddmsg;
+  late List compteCounts;
   String countOperationComptes = "0",
       countOperationGestion = "0",
       countConnections = "0";
@@ -90,7 +90,7 @@ class GestCompteController extends State<GestCompte> {
         setErrorNom = true;
       });
     }
-    return null;
+    return "";
   }
 
   Future<String> deleteCompte() async {

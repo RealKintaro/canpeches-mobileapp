@@ -10,7 +10,7 @@ class GetAllImports extends StatefulWidget {
 }
 
 class GetAllImportsController extends State<GetAllImports> {
-  List achat;
+  late List achat;
   bool visible = true;
   Future getAllImportPoisson() async {
     var url = globals.globalurl + "/getAllImports.php";
@@ -65,7 +65,7 @@ class GetAllImportsController extends State<GetAllImports> {
             : Expanded(
                 child: Container(
                 child: ListView.builder(
-                  itemCount: achat == null ? 1 : achat.length + 1,
+                  itemCount: achat.length + 1,
                   itemBuilder: (BuildContext context, int index) {
                     if (index == 0) {
                       // return the header

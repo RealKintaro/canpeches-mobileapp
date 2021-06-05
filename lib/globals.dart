@@ -6,15 +6,16 @@ import 'package:flutter/material.dart';
 
 String globalurl = "https://canpeches.000webhostapp.com/mobileapi";
 String userEmail = "";
+String userPass = "";
 String userName = "";
 String poissonid = "";
-Map compteInfo;
+late Map compteInfo;
 BoxDecoration background() {
   return BoxDecoration(
       gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [Colors.indigo[900], Colors.white]));
+          colors: [Colors.indigo.shade900, Colors.white]));
 }
 
 charts.BarLabelDecorator labelDecorator() {

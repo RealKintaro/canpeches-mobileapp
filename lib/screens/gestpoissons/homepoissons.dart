@@ -9,7 +9,7 @@ class HomePoissons extends StatefulWidget {
 }
 
 class HomePoissonsController extends State<HomePoissons> {
-  List poissons;
+  late List poissons;
   bool visible = true;
   Future getPoissons() async {
     var url = globals.globalurl + "/getPoissons.php";
@@ -61,7 +61,7 @@ class HomePoissonsController extends State<HomePoissons> {
                               new AlwaysStoppedAnimation<Color>(Colors.white),
                         ))))
             : ListView.builder(
-                itemCount: poissons == null ? 0 : poissons.length,
+                itemCount: poissons.length,
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
                     onTap: () {
