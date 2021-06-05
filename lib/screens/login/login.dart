@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:canpeches/screens/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -52,7 +53,13 @@ class LoginController extends State<Login> {
 
           visible = false;
           if (mounted) {
-            Navigator.pushReplacementNamed(context, "/home");
+            Future.delayed(const Duration(seconds: 1, milliseconds: 500), () {
+              setState(() {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => Home()),
+                    (route) => false);
+              });
+            });
           }
         } else {
           // If Email or Password did not Matched.

@@ -1,10 +1,11 @@
 import 'package:canpeches/models/stockphysique.dart';
 import 'package:canpeches/screens/appdrawer.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:canpeches/globals.dart' as globals;
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'dart:convert';
 
 class Home extends StatefulWidget {
@@ -101,8 +102,23 @@ class HomeController extends State<Home> {
               Icons.power_settings_new_outlined,
             ),
             onPressed: () {
-              Navigator.pop(context);
-              Phoenix.rebirth(context);
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: new Text("Voulez vous se deconnexter?"),
+                    actions: <Widget>[
+                      TextButton(
+                        child: new Text("OK"),
+                        onPressed: () {
+                          SystemChannels.platform
+                              .invokeMethod('SystemNavigator.pop');
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
             },
           ),
         ],
