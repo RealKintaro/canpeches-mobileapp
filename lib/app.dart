@@ -9,7 +9,9 @@ import 'package:canpeches/screens/gestpoissons/homepoissons.dart';
 import 'package:canpeches/screens/home/home.dart';
 import 'package:canpeches/screens/importexport/export.dart';
 import 'package:canpeches/screens/importexport/import.dart';
+import 'package:canpeches/screens/login/fingerprint.dart';
 import 'package:canpeches/screens/login/qrcode.dart';
+import 'package:canpeches/screens/qrcode/qrcodegenerator.dart';
 import 'package:flutter/material.dart';
 import 'screens/login/login.dart';
 
@@ -35,6 +37,8 @@ class App extends StatelessWidget {
         '/addCompte': (BuildContext context) => new AddCompte(),
         '/gestCompte': (BuildContext context) => new GestCompte(),
         '/qrCode': (BuildContext context) => new QrScane(),
+        '/fingerPrint': (BuildContext context) => new FingerPrint(),
+        '/qrGen': (BuildContext context) => new QrCodeGen(),
       },
     );
   }

@@ -9,6 +9,7 @@ class HomePoissons extends StatefulWidget {
 }
 
 class HomePoissonsController extends State<HomePoissons> {
+  String? countvents;
   late List poissons;
   bool visible = true;
   Future getPoissons() async {
@@ -70,28 +71,55 @@ class HomePoissonsController extends State<HomePoissons> {
                     },
                     child: Card(
                       child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          children: [
-                            ImageIcon(
-                              AssetImage("assets/images/fish3.png"),
-                              color: Colors.indigo[600],
-                              size: 30,
-                            ),
-                            Padding(
-                                padding: EdgeInsets.fromLTRB(
-                                    20.0, 20.0, 20.0, 20.0)),
-                            Text(
-                              poissons[index]["name"],
-                              style: TextStyle(
-                                color: Colors.indigo[400],
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.w700,
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  ImageIcon(
+                                    AssetImage("assets/images/fish3.png"),
+                                    color: Colors.indigo[600],
+                                    size: 30,
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.fromLTRB(
+                                          5.0, 20.0, 5.0, 20.0)),
+                                  Text(
+                                    poissons[index]["name"],
+                                    style: TextStyle(
+                                      color: Colors.indigo[400],
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  )
+                                ],
                               ),
-                            )
-                          ],
-                        ),
-                      ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Nombre des vents: " +
+                                        poissons[index]["countvents"]!,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  Padding(padding: EdgeInsets.only(right: 20)),
+                                  Text(
+                                    "Nombre des achats: " +
+                                        poissons[index]["countachats"]!,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15.0,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          )),
                     ),
                   );
                 },

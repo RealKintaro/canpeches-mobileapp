@@ -106,7 +106,7 @@ class HomeController extends State<Home> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: new Text("Voulez vous se deconnexter?"),
+                    title: new Text("Voulez vous se deconnecter?"),
                     actions: <Widget>[
                       TextButton(
                         child: new Text("OK"),
@@ -313,15 +313,13 @@ class HomeController extends State<Home> {
                 ),
               ),
               Container(
-                  height: 400.0,
-                  width: 400,
-                  child: Card(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: graphs(showgraphs),
-                    ),
-                  )),
+                height: 400.0,
+                width: 400,
+                child: Card(
+                  color: Colors.white,
+                  child: graphs(showgraphs),
+                ),
+              ),
             ],
           )),
       drawer: AppDrawer(),
@@ -330,31 +328,50 @@ class HomeController extends State<Home> {
 
   Widget graphs(bool test) {
     if (test) {
-      return Column(
-        children: [
+      if (stock.length <= 5) {
+        return Column(children: [
           Text(
             "Stock des poissons:",
             style: TextStyle(
                 fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black),
           ),
           Expanded(
-            child: charts.BarChart(
-              chartData(stock.length > 5 ? stock.sublist(0, 5) : stock),
-              animate: true,
-              barRendererDecorator: globals.labelDecorator(),
-              primaryMeasureAxis: globals.primaryAxisDecorator(),
+              child: charts.BarChart(
+            chartData(stock),
+            animate: true,
+            barRendererDecorator: globals.labelDecorator(),
+            primaryMeasureAxis: globals.primaryAxisDecorator(),
+          ))
+        ]);
+      } else {
+        return Column(
+          children: [
+            Text(
+              "Stock des poissons:",
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black),
             ),
-          ),
-          Expanded(
-            child: charts.BarChart(
-              chartData(stock.length > 5 ? stock.sublist(5) : stock),
-              animate: true,
-              barRendererDecorator: globals.labelDecorator(),
-              primaryMeasureAxis: globals.primaryAxisDecorator(),
+            Expanded(
+              child: charts.BarChart(
+                chartData(stock.length > 5 ? stock.sublist(0, 5) : stock),
+                animate: true,
+                barRendererDecorator: globals.labelDecorator(),
+                primaryMeasureAxis: globals.primaryAxisDecorator(),
+              ),
             ),
-          )
-        ],
-      );
+            Expanded(
+              child: charts.BarChart(
+                chartData(stock.length > 5 ? stock.sublist(5) : stock),
+                animate: true,
+                barRendererDecorator: globals.labelDecorator(),
+                primaryMeasureAxis: globals.primaryAxisDecorator(),
+              ),
+            ),
+          ],
+        );
+      }
     } else {
       return Center(
           child: Visibility(

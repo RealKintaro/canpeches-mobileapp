@@ -58,7 +58,8 @@ class AppDrawer extends StatelessWidget {
             size: 30,
           ),
           onTap: () {
-            newPushNamed(context, "/home");
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil("/home", (route) => false);
           },
         ),
         Row(
@@ -170,6 +171,28 @@ class AppDrawer extends StatelessWidget {
           ),
           onTap: () {
             newPushNamed(context, '/getHistoriqueConnections');
+          },
+        ),
+        Row(
+          children: [
+            Padding(padding: EdgeInsets.only(left: 10.0)),
+            Text(
+              "Autre:",
+              style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.indigo[500],
+                  fontWeight: FontWeight.w700),
+            ),
+          ],
+        ),
+        ListTile(
+          title: Text("Qr code"),
+          leading: const Icon(
+            Icons.qr_code,
+            size: 30,
+          ),
+          onTap: () {
+            newPushNamed(context, '/qrGen');
           },
         )
       ],

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:canpeches/screens/home/home.dart';
+import 'package:canpeches/screens/login/fingerprint.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -50,21 +51,21 @@ class LoginController extends State<Login> {
           globals.userEmail = email;
           globals.userName =
               lresponse![0]["lastname"] + " " + lresponse![0]["firstname"];
+          globals.userPass = password;
 
-          visible = false;
           if (mounted) {
-            Future.delayed(const Duration(seconds: 1, milliseconds: 500), () {
+            Future.delayed(const Duration(seconds: 1, milliseconds: 200), () {
               setState(() {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => Home()),
-                    (route) => false);
+                setState(() {
+                  visible = false;
+                });
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil("/home", (route) => false);
               });
             });
           }
         } else {
           // If Email or Password did not Matched.
-
-          visible = false;
 
           showDialog(
             context: context,
@@ -75,6 +76,9 @@ class LoginController extends State<Login> {
                   TextButton(
                     child: new Text("OK"),
                     onPressed: () {
+                      setState(() {
+                        visible = false;
+                      });
                       Navigator.of(context).pop();
                     },
                   ),
@@ -124,7 +128,7 @@ class LoginController extends State<Login> {
                 height: 30,
               ),
               Container(
-                  height: 370.0,
+                  height: 400.0,
                   width: 350.0,
                   padding: EdgeInsets.all(20.0),
                   alignment: Alignment.center,
@@ -248,6 +252,20 @@ class LoginController extends State<Login> {
                                 elevation: 5,
                               ),
                             ),
+                            /*ElevatedButton.icon(
+                              onPressed: (() {
+                                Navigator.pushNamed(context, "/fingerPrint");
+                              }),
+                              icon: Icon(Icons.fingerprint),
+                              label: Text("Finger Print"),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.indigo[400],
+                                shape: const BeveledRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5))),
+                                elevation: 5,
+                              ),
+                            ),*/
                           ],
                         )),
             ],
