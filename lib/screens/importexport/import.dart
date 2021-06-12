@@ -1,7 +1,7 @@
-import 'package:canpeches/screens/appdrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:canpeches/globals.dart' as globals;
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'dart:convert';
 
 class GetAllImports extends StatefulWidget {
@@ -10,11 +10,13 @@ class GetAllImports extends StatefulWidget {
 }
 
 class GetAllImportsController extends State<GetAllImports> {
+  String? pickedDate;
   late List achat;
   bool visible = true;
-  Future getAllImportPoisson() async {
+  Future getAllImportPoisson(String? pickeddate) async {
+    visible = true;
     var url = globals.globalurl + "/getAllImports.php";
-    var data = {'id': globals.poissonid};
+    var data = {'date': pickeddate};
     var response = await http.post(Uri.parse(url), body: json.encode(data));
     setState(() {
       achat = jsonDecode(response.body);
@@ -22,10 +24,24 @@ class GetAllImportsController extends State<GetAllImports> {
     });
   }
 
+  Future pickDate(BuildContext context) async {
+    var outputFormat = DateFormat('yyyy-MM-dd');
+    final initDate = DateTime.now();
+    final pickeddate = await showDatePicker(
+        context: context,
+        initialDate: initDate,
+        firstDate: DateTime(DateTime.now().year - 5),
+        lastDate: DateTime(DateTime.now().year + 5));
+    if (pickeddate == null) return;
+    setState(() {
+      pickedDate = outputFormat.format(pickeddate).toString();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    getAllImportPoisson();
+    getAllImportPoisson("");
   }
 
   @override
@@ -38,11 +54,15 @@ class GetAllImportsController extends State<GetAllImports> {
         ),
         actions: [
           IconButton(
-            tooltip: "Recherche",
-            icon: const Icon(
-              Icons.search,
-            ),
-            onPressed: () {},
+            tooltip: "Filtre",
+            icon: const Icon(Icons.sort),
+            onPressed: () {
+              pickDate(context).then((value) {
+                setState(() {
+                  getAllImportPoisson(pickedDate);
+                });
+              });
+            },
           ),
         ],
       ),
@@ -74,21 +94,10 @@ class GetAllImportsController extends State<GetAllImports> {
                         padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
                         child: Row(
                           children: [
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 6 - 5,
-                                child: Center(
-                                  child: Text('Date',
-                                      style: TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black,
-                                      )),
-                                )),
                             Padding(padding: EdgeInsets.all(2.0)),
                             Container(
                                 width:
-                                    MediaQuery.of(context).size.width / 6 + 35,
+                                    MediaQuery.of(context).size.width / 5 + 35,
                                 child: Center(
                                   child: Text('Maryeur',
                                       style: TextStyle(
@@ -100,7 +109,7 @@ class GetAllImportsController extends State<GetAllImports> {
                             Padding(padding: EdgeInsets.all(2.0)),
                             Container(
                                 width:
-                                    MediaQuery.of(context).size.width / 6 - 5,
+                                    MediaQuery.of(context).size.width / 5 - 5,
                                 child: Center(
                                   child: Text('Num Etat',
                                       style: TextStyle(
@@ -112,7 +121,7 @@ class GetAllImportsController extends State<GetAllImports> {
                             Padding(padding: EdgeInsets.all(2.0)),
                             Container(
                                 width:
-                                    MediaQuery.of(context).size.width / 6 - 20,
+                                    MediaQuery.of(context).size.width / 5 - 20,
                                 child: Center(
                                   child: Text('Qte',
                                       style: TextStyle(
@@ -124,7 +133,7 @@ class GetAllImportsController extends State<GetAllImports> {
                             Padding(padding: EdgeInsets.all(2.0)),
                             Container(
                                 width:
-                                    MediaQuery.of(context).size.width / 6 - 20,
+                                    MediaQuery.of(context).size.width / 5 - 20,
                                 child: Center(
                                   child: Text('Rend',
                                       style: TextStyle(
@@ -136,7 +145,7 @@ class GetAllImportsController extends State<GetAllImports> {
                             Padding(padding: EdgeInsets.all(2.0)),
                             Container(
                                 width:
-                                    MediaQuery.of(context).size.width / 6 - 20,
+                                    MediaQuery.of(context).size.width / 5 - 20,
                                 child: Center(
                                   child: Text('Poids',
                                       style: TextStyle(
@@ -162,6 +171,7 @@ class GetAllImportsController extends State<GetAllImports> {
                       child: Padding(
                         padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               "Poisson: " + achat[index]["poisson"],
@@ -171,32 +181,31 @@ class GetAllImportsController extends State<GetAllImports> {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
+                            Padding(
+                                padding: EdgeInsets.only(
+                              top: 10,
+                            )),
+                            Text(
+                              "Date: " + achat[index]["date"],
+                              style: TextStyle(
+                                color: Colors.indigo[900],
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Padding(padding: EdgeInsets.all(10.0)),
                             Row(
                               children: [
                                 Container(
                                     width:
-                                        MediaQuery.of(context).size.width / 6,
-                                    child: Center(
-                                      child: Text(
-                                        achat[index]["date"],
-                                        style: TextStyle(
-                                          color: Colors.indigo[400],
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    )),
-                                Padding(padding: EdgeInsets.all(2.0)),
-                                Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 6 +
+                                        MediaQuery.of(context).size.width / 5 +
                                             35,
                                     child: Center(
                                       child: Text(
                                         achat[index]["maryeur"],
                                         style: TextStyle(
-                                          color: Colors.indigo[400],
-                                          fontSize: 14.0,
+                                          color: Colors.black,
+                                          fontSize: 15.0,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
@@ -204,12 +213,12 @@ class GetAllImportsController extends State<GetAllImports> {
                                 Padding(padding: EdgeInsets.all(2.0)),
                                 Container(
                                   width:
-                                      MediaQuery.of(context).size.width / 6 - 5,
+                                      MediaQuery.of(context).size.width / 5 - 5,
                                   child: Text(
                                     achat[index]["netat"],
                                     style: TextStyle(
-                                      color: Colors.indigo[400],
-                                      fontSize: 14.0,
+                                      color: Colors.black,
+                                      fontSize: 15.0,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
@@ -217,14 +226,14 @@ class GetAllImportsController extends State<GetAllImports> {
                                 Padding(padding: EdgeInsets.all(2.0)),
                                 Container(
                                     width:
-                                        MediaQuery.of(context).size.width / 6 -
+                                        MediaQuery.of(context).size.width / 5 -
                                             18,
                                     child: Center(
                                       child: Text(
                                         achat[index]["qte"],
                                         style: TextStyle(
-                                          color: Colors.indigo[400],
-                                          fontSize: 13.0,
+                                          color: Colors.black,
+                                          fontSize: 15.0,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
@@ -232,14 +241,14 @@ class GetAllImportsController extends State<GetAllImports> {
                                 Padding(padding: EdgeInsets.all(2.0)),
                                 Container(
                                     width:
-                                        MediaQuery.of(context).size.width / 6 -
+                                        MediaQuery.of(context).size.width / 5 -
                                             20,
                                     child: Center(
                                       child: Text(
                                         achat[index]["rend"],
                                         style: TextStyle(
-                                          color: Colors.indigo[400],
-                                          fontSize: 14.0,
+                                          color: Colors.black,
+                                          fontSize: 15.0,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
@@ -247,14 +256,14 @@ class GetAllImportsController extends State<GetAllImports> {
                                 Padding(padding: EdgeInsets.all(2.0)),
                                 Container(
                                     width:
-                                        MediaQuery.of(context).size.width / 6 -
+                                        MediaQuery.of(context).size.width / 5 -
                                             20,
                                     child: Center(
                                       child: Text(
                                         achat[index]["poids"],
                                         style: TextStyle(
-                                          color: Colors.indigo[400],
-                                          fontSize: 14.0,
+                                          color: Colors.black,
+                                          fontSize: 15.0,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
@@ -269,7 +278,6 @@ class GetAllImportsController extends State<GetAllImports> {
                 ),
               )),
       ),
-      drawer: AppDrawer(),
     );
   }
 }

@@ -14,7 +14,7 @@ class Home extends StatefulWidget {
 
 class HomeController extends State<Home> {
   late List poissonsCount;
-  List<Stockphysique> stock = [];
+  late List<Stockphysique> stock;
   bool showgraphs = false;
   bool visible = true;
 
@@ -345,6 +345,8 @@ class HomeController extends State<Home> {
         ]);
       } else {
         return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.max,
           children: [
             Text(
               "Stock des poissons:",
@@ -355,7 +357,7 @@ class HomeController extends State<Home> {
             ),
             Expanded(
               child: charts.BarChart(
-                chartData(stock.length > 5 ? stock.sublist(0, 5) : stock),
+                chartData(stock.sublist(0, 5)),
                 animate: true,
                 barRendererDecorator: globals.labelDecorator(),
                 primaryMeasureAxis: globals.primaryAxisDecorator(),
@@ -363,7 +365,7 @@ class HomeController extends State<Home> {
             ),
             Expanded(
               child: charts.BarChart(
-                chartData(stock.length > 5 ? stock.sublist(5) : stock),
+                chartData(stock.sublist(5)),
                 animate: true,
                 barRendererDecorator: globals.labelDecorator(),
                 primaryMeasureAxis: globals.primaryAxisDecorator(),

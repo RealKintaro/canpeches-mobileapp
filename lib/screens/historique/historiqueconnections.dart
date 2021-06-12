@@ -2,6 +2,7 @@ import 'package:canpeches/screens/appdrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:canpeches/globals.dart' as globals;
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'dart:convert';
 
 class HistoriqueConnection extends StatefulWidget {
@@ -10,21 +11,39 @@ class HistoriqueConnection extends StatefulWidget {
 }
 
 class HistoriqueConnectionController extends State<HistoriqueConnection> {
+  String? pickedDate;
   late List historiqueConnection;
   bool visible = true;
-  Future getHistoriqueCompte() async {
+  Future getHistoriqueCompte(String? pickeddate) async {
+    visible = true;
     var url = globals.globalurl + "/getHistoriqueConnections.php";
-    http.Response response = await http.get(Uri.parse(url));
+    var data = {'date': pickeddate};
+    http.Response response =
+        await http.post(Uri.parse(url), body: json.encode(data));
     setState(() {
       historiqueConnection = json.decode(response.body);
       visible = false;
     });
   }
 
+  Future pickDate(BuildContext context) async {
+    var outputFormat = DateFormat('yyyy-MM-dd');
+    final initDate = DateTime.now();
+    final pickeddate = await showDatePicker(
+        context: context,
+        initialDate: initDate,
+        firstDate: DateTime(DateTime.now().year - 5),
+        lastDate: DateTime(DateTime.now().year + 5));
+    if (pickeddate == null) return;
+    setState(() {
+      pickedDate = outputFormat.format(pickeddate).toString();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    getHistoriqueCompte();
+    getHistoriqueCompte("");
   }
 
   @override
@@ -38,6 +57,19 @@ class HistoriqueConnectionController extends State<HistoriqueConnection> {
             fontSize: 14,
           ),
         ),
+        actions: [
+          IconButton(
+            tooltip: "Filtre",
+            icon: const Icon(Icons.sort),
+            onPressed: () {
+              pickDate(context).then((value) {
+                setState(() {
+                  getHistoriqueCompte(pickedDate);
+                });
+              });
+            },
+          ),
+        ],
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,

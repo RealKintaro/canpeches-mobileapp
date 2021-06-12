@@ -2,6 +2,7 @@ import 'package:canpeches/screens/appdrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:canpeches/globals.dart' as globals;
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'dart:convert';
 
 class HistoriqueComptes extends StatefulWidget {
@@ -10,20 +11,38 @@ class HistoriqueComptes extends StatefulWidget {
 
 class HistoriqueComptesController extends State<HistoriqueComptes> {
   late List historiqueCompte;
+  String? pickedDate;
   bool visible = true;
-  Future getHistoriqueCompte() async {
+  Future getHistoriqueCompte(String? pickeddate) async {
+    visible = true;
     var url = globals.globalurl + "/getHistoriqueComptes.php";
-    http.Response response = await http.get(Uri.parse(url));
+    var data = {'date': pickeddate};
+    http.Response response =
+        await http.post(Uri.parse(url), body: json.encode(data));
     setState(() {
       historiqueCompte = json.decode(response.body);
       visible = false;
     });
   }
 
+  Future pickDate(BuildContext context) async {
+    var outputFormat = DateFormat('yyyy-MM-dd');
+    final initDate = DateTime.now();
+    final pickeddate = await showDatePicker(
+        context: context,
+        initialDate: initDate,
+        firstDate: DateTime(DateTime.now().year - 5),
+        lastDate: DateTime(DateTime.now().year + 5));
+    if (pickeddate == null) return;
+    setState(() {
+      pickedDate = outputFormat.format(pickeddate).toString();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    getHistoriqueCompte();
+    getHistoriqueCompte("");
   }
 
   @override
@@ -37,6 +56,19 @@ class HistoriqueComptesController extends State<HistoriqueComptes> {
             fontSize: 14,
           ),
         ),
+        actions: [
+          IconButton(
+            tooltip: "Filtre",
+            icon: const Icon(Icons.sort),
+            onPressed: () {
+              pickDate(context).then((value) {
+                setState(() {
+                  getHistoriqueCompte(pickedDate);
+                });
+              });
+            },
+          ),
+        ],
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
