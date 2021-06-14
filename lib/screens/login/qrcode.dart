@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:canpeches/globals.dart' as globals;
 
+import 'login.dart';
+
 class QrScane extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _QrScaneState();
@@ -13,6 +15,7 @@ class QrScane extends StatefulWidget {
 
 class _QrScaneState extends State<QrScane> {
   Barcode? result;
+  bool? setError = false;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey();
   Map? loginInfo;
@@ -42,7 +45,12 @@ class _QrScaneState extends State<QrScane> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text('Scanner un code'),
+                setError!
+                    ? Text(
+                        "QR CODE INVALIDE",
+                        style: TextStyle(color: Colors.red),
+                      )
+                    : Text('Scanner un code'),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -157,13 +165,16 @@ class _QrScaneState extends State<QrScane> {
       return Expanded(flex: 4, child: _buildQrView(context));
     } on Exception catch (_) {
       result = null;
-      Navigator.pop(context);
+      setState(() {
+        setError = true;
+      });
       return Expanded(flex: 4, child: _buildQrView(context));
     } catch (error) {
+      setState(() {
+        setError = true;
+      });
       result = null;
-      Navigator.pop(context);
       return Expanded(flex: 4, child: _buildQrView(context));
-      // executed for errors of all types other than Exception
     }
   }
 

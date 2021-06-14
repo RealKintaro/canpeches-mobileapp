@@ -11,10 +11,15 @@ class HomePoissons extends StatefulWidget {
 class HomePoissonsController extends State<HomePoissons> {
   String? countvents;
   late List poissons;
-  bool visible = true;
-  Future getPoissons() async {
+  bool visible = true, isSearching = false;
+  Future getPoissons(String? poisson) async {
+    setState(() {
+      visible = true;
+    });
     var url = globals.globalurl + "/getPoissons.php";
-    http.Response response = await http.get(Uri.parse(url));
+    var data = {'poisson': poisson};
+    http.Response response =
+        await http.post(Uri.parse(url), body: json.encode(data));
     setState(() {
       poissons = json.decode(response.body);
       visible = false;
@@ -24,7 +29,7 @@ class HomePoissonsController extends State<HomePoissons> {
   @override
   void initState() {
     super.initState();
-    getPoissons();
+    getPoissons("");
   }
 
   @override
@@ -32,17 +37,45 @@ class HomePoissonsController extends State<HomePoissons> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo[900],
-        title: Text(
-          "Nos poissons",
-        ),
+        title: !isSearching
+            ? Text(
+                "Nos poissons",
+              )
+            : TextField(
+                style: TextStyle(color: Colors.white),
+                onChanged: (string) {
+                  setState(() {
+                    getPoissons(string);
+                  });
+                },
+                decoration: InputDecoration(
+                    icon: Icon(
+                      Icons.search,
+                      color: Colors.white,
+                    ),
+                    hintText: "Recherche",
+                    hintStyle: TextStyle(color: Colors.white)),
+              ),
         actions: [
-          IconButton(
-            tooltip: "Recherche",
-            icon: const Icon(
-              Icons.search,
-            ),
-            onPressed: () {},
-          ),
+          !isSearching
+              ? IconButton(
+                  tooltip: "Recherche",
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    setState(() {
+                      isSearching = true;
+                    });
+                  },
+                )
+              : IconButton(
+                  tooltip: "Cancel",
+                  icon: const Icon(Icons.cancel),
+                  onPressed: () {
+                    setState(() {
+                      isSearching = false;
+                    });
+                  },
+                ),
         ],
       ),
       body: Container(

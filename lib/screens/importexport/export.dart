@@ -82,8 +82,7 @@ class GetAllExportsController extends State<GetAllExports> {
                           valueColor:
                               new AlwaysStoppedAnimation<Color>(Colors.white),
                         ))))
-            : Expanded(
-                child: Container(
+            : Container(
                 child: ListView.builder(
                   itemCount: vents.length + 1,
                   itemBuilder: (BuildContext context, int index) {
@@ -256,7 +255,7 @@ class GetAllExportsController extends State<GetAllExports> {
                     );
                   },
                 ),
-              )),
+              ),
       ),
     );
   }

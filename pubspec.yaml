@@ -35,8 +35,9 @@ dependencies:
   fluttertoast: ^8.0.7
   qr_code_scanner: ^0.5.1
   flutter_phoenix: ^1.0.0
-  local_auth: ^1.1.6
   qr_flutter: ^4.0.0
+  connectivity: ^3.0.6
+  data_connection_checker: ^0.3.4
 
 dev_dependencies:
   flutter_test:

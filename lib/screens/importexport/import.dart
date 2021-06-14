@@ -82,8 +82,7 @@ class GetAllImportsController extends State<GetAllImports> {
                           valueColor:
                               new AlwaysStoppedAnimation<Color>(Colors.white),
                         ))))
-            : Expanded(
-                child: Container(
+            : Container(
                 child: ListView.builder(
                   itemCount: achat.length + 1,
                   itemBuilder: (BuildContext context, int index) {
@@ -276,7 +275,7 @@ class GetAllImportsController extends State<GetAllImports> {
                     );
                   },
                 ),
-              )),
+              ),
       ),
     );
   }
