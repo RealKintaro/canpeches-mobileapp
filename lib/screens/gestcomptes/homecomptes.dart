@@ -1,4 +1,6 @@
 import 'package:canpeches/screens/appdrawer.dart';
+import 'package:canpeches/screens/gestcomptes/addcompte.dart';
+import 'package:canpeches/screens/gestcomptes/gestcompte.dart';
 import 'package:flutter/material.dart';
 import 'package:canpeches/globals.dart' as globals;
 import 'package:http/http.dart' as http;
@@ -57,7 +59,7 @@ class HomeComptesController extends State<HomeComptes> {
                 itemCount: comptes.length,
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       globals.compteInfo = {
                         'id': comptes[index]["id"],
                         'nom': comptes[index]["nom"],
@@ -65,7 +67,14 @@ class HomeComptesController extends State<HomeComptes> {
                         'email': comptes[index]["email"],
                         'etat': comptes[index]["etat"]
                       };
-                      Navigator.pushReplacementNamed(context, '/gestCompte');
+
+                      final value = await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => GestCompte()),
+                      );
+                      setState(() {
+                        getComptes();
+                      });
                     },
                     child: Card(
                       child: Padding(
@@ -155,6 +164,45 @@ class HomeComptesController extends State<HomeComptes> {
                                         ),
                                 ],
                               ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Etat:",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Padding(padding: EdgeInsets.only(right: 5.0)),
+                                  comptes[index]["role"] == "0"
+                                      ? Text(
+                                          "Admin",
+                                          style: TextStyle(
+                                            color: Colors.indigo[400],
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        )
+                                      : comptes[index]["role"] == "1"
+                                          ? Text(
+                                              "SuperAdmin",
+                                              style: TextStyle(
+                                                color: Colors.indigo[400],
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            )
+                                          : Text(
+                                              "null",
+                                              style: TextStyle(
+                                                color: Colors.indigo[400],
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            )
+                                ],
+                              ),
                             ],
                           )),
                     ),
@@ -163,8 +211,11 @@ class HomeComptesController extends State<HomeComptes> {
               ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, "/addCompte");
+        onPressed: () async {
+          final value = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddCompte()),
+          );
           setState(() {
             getComptes();
           });

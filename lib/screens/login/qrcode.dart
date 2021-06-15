@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:canpeches/globals.dart' as globals;
 
-import 'login.dart';
-
 class QrScane extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _QrScaneState();
@@ -149,6 +147,9 @@ class _QrScaneState extends State<QrScane> {
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         result = scanData;
+        if (result != null) {
+          controller.pauseCamera();
+        }
       });
     });
   }
@@ -160,20 +161,24 @@ class _QrScaneState extends State<QrScane> {
       loginInfo = json.decode(result!.code);
       globals.userEmail = loginInfo!["email"];
       globals.userPass = loginInfo!["mdp"];
-      result = null;
+      setState(() {
+        result = null;
+      });
       Navigator.pop(context);
       return Expanded(flex: 4, child: _buildQrView(context));
     } on Exception catch (_) {
-      result = null;
       setState(() {
+        result = null;
+        controller!.resumeCamera();
         setError = true;
       });
       return Expanded(flex: 4, child: _buildQrView(context));
     } catch (error) {
       setState(() {
+        result = null;
+        controller!.resumeCamera();
         setError = true;
       });
-      result = null;
       return Expanded(flex: 4, child: _buildQrView(context));
     }
   }

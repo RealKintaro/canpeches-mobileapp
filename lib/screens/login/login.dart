@@ -4,6 +4,7 @@ import 'package:connectivity/connectivity.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
+import 'package:dart_ipify/dart_ipify.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:canpeches/globals.dart' as globals;
@@ -88,7 +89,17 @@ class LoginController extends State<Login> {
             setErrorMail = false;
             setErrorPass = false;
           });
-          var data = {'email': email, 'password': password};
+
+          final ip = await Ipify.ipv64(format: Format.TEXT);
+
+          var now = DateTime.now();
+
+          var data = {
+            'email': email,
+            'password': password,
+            'ip': ip,
+            'date': now.toString()
+          };
 
           var response =
               await http.post(Uri.parse(url), body: json.encode(data));
@@ -102,7 +113,7 @@ class LoginController extends State<Login> {
             globals.userPass = password;
 
             if (mounted) {
-              Future.delayed(const Duration(seconds: 1, milliseconds: 200), () {
+              Future.delayed(const Duration(milliseconds: 500), () {
                 setState(() {
                   visible = false;
 
@@ -171,14 +182,14 @@ class LoginController extends State<Login> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     ImageBanner('assets/images/logo.jpg'),
                     SizedBox(
                       height: 30,
                     ),
                     Container(
-                        height: 400.0,
+                        height: 370.0,
                         width: 350.0,
                         padding: EdgeInsets.all(20.0),
                         alignment: Alignment.center,

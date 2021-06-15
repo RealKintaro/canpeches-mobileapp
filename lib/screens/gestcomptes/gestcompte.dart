@@ -434,8 +434,7 @@ class GestCompteController extends State<GestCompte> {
                                                           Colors.indigo[500],
                                                       textColor: Colors.white,
                                                       fontSize: 16.0);
-                                                  Navigator.popAndPushNamed(
-                                                      context, "/homeComptes");
+                                                  Navigator.pop(context);
                                                 }
                                               });
                                             }),
