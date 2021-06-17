@@ -20,6 +20,7 @@ class LoginController extends State<Login> {
   TextEditingController controllerMail = new TextEditingController();
   TextEditingController controllerPass = new TextEditingController();
   List? lresponse;
+  String? type;
   // For CircularProgressIndicator.
   bool visible = false, isConnected = true;
 
@@ -95,10 +96,11 @@ class LoginController extends State<Login> {
           var now = DateTime.now();
 
           var data = {
-            'email': email,
-            'password': password,
-            'ip': ip,
-            'date': now.toString()
+            "email": email,
+            "password": password,
+            "ip": ip,
+            "date": now.toString(),
+            "type": type
           };
 
           var response =
@@ -108,12 +110,12 @@ class LoginController extends State<Login> {
           if (lresponse![0]["res"] == 'Login Matched') {
             // Hiding the CircularProgressIndicator.
             globals.userEmail = email;
-            globals.userName =
-                lresponse![0]["lastname"] + " " + lresponse![0]["firstname"];
-            globals.userPass = password;
-
+            globals.userName = lresponse![0]["firstname"];
+            globals.userLastName = lresponse![0]["lastname"];
+            globals.userPass = lresponse![0]["token"];
+            globals.userId = lresponse![0]["id"];
             if (mounted) {
-              Future.delayed(const Duration(milliseconds: 500), () {
+              Future.delayed(const Duration(milliseconds: 0), () {
                 setState(() {
                   visible = false;
 
@@ -178,15 +180,12 @@ class LoginController extends State<Login> {
           decoration: globals.background(),
           child: isConnected
               ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      height: 10,
-                    ),
                     ImageBanner('assets/images/logo.jpg'),
                     SizedBox(
-                      height: 30,
+                      height: 5,
                     ),
                     Container(
                         height: 370.0,
@@ -265,8 +264,9 @@ class LoginController extends State<Login> {
                                   ElevatedButton.icon(
                                     onPressed: (() {
                                       isInternet().then((value) {
-                                        login(controllerMail.text,
-                                            controllerPass.text);
+                                        type = "normal";
+                                        login(controllerMail.text.trim(),
+                                            controllerPass.text.trim());
                                       });
                                     }),
                                     icon: Icon(Icons.login),
@@ -284,32 +284,35 @@ class LoginController extends State<Login> {
                                   ),
                                   ElevatedButton.icon(
                                     onPressed: (() {
-                                      Navigator.pushNamed(context, "/qrCode")
-                                          .then((value) {
-                                        if (globals.userEmail.trim() != "" &&
-                                            globals.userPass.trim() != "") {
-                                          login(globals.userEmail.trim(),
-                                              globals.userPass.trim());
-                                        } else {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title:
-                                                    new Text("Qr code invalid"),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    child: new Text("OK"),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        }
+                                      isInternet().then((value) {
+                                        Navigator.pushNamed(context, "/qrCode")
+                                            .then((value) {
+                                          type = "qr";
+                                          if (globals.userEmail.trim() != "" &&
+                                              globals.userPass.trim() != "") {
+                                            login(globals.userEmail.trim(),
+                                                globals.userPass.trim());
+                                          } else {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: new Text(
+                                                      "Qr code invalid"),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      child: new Text("OK"),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          }
+                                        });
                                       });
                                     }),
                                     icon: Icon(Icons.qr_code_scanner),

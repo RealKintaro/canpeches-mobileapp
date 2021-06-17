@@ -124,22 +124,44 @@ class HistoriqueConnectionController extends State<HistoriqueConnection> {
                               ],
                             ),
                             Padding(padding: EdgeInsets.all(2.5)),
-                            Text(
-                              "Date:",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.indigo[400],
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Padding(padding: EdgeInsets.all(2.5)),
-                            Text(
-                              historiqueConnection[index]["date"],
-                              style: TextStyle(
-                                fontSize: 12.5,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
-                              ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Date:",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.indigo[400],
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                Padding(padding: EdgeInsets.all(2.5)),
+                                Text(
+                                  historiqueConnection[index]["date"],
+                                  style: TextStyle(
+                                    fontSize: 12.5,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                Padding(padding: EdgeInsets.all(5)),
+                                Text(
+                                  "IP:",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.indigo[400],
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                Padding(padding: EdgeInsets.all(2.5)),
+                                Text(
+                                  historiqueConnection[index]["ip"],
+                                  style: TextStyle(
+                                    fontSize: 12.5,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         )),

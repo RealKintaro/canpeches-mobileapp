@@ -4,8 +4,6 @@ import 'package:canpeches/globals.dart' as globals;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:wc_form_validators/wc_form_validators.dart';
-
 class AddCompte extends StatefulWidget {
   AddCompteController createState() => AddCompteController();
 }
@@ -35,10 +33,13 @@ class AddCompteController extends State<AddCompte> {
     bool emailValid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(email);
+    bool passwordValid = RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')
+        .hasMatch(password);
+
     if (nom != "") {
       if (prenom != "") {
         if (emailValid) {
-          if (password != "") {
+          if (passwordValid) {
             var data = {
               'curruser': globals.userEmail,
               'nom': nom,
@@ -55,7 +56,6 @@ class AddCompteController extends State<AddCompte> {
             var response =
                 await http.post(Uri.parse(url), body: json.encode(data));
             var rep = jsonDecode(response.body);
-            debugPrint(rep);
             return rep;
           } else {
             setState(() {
@@ -201,12 +201,6 @@ class AddCompteController extends State<AddCompte> {
                           child: TextFormField(
                               controller: controllerPass,
                               obscureText: _obscureText,
-                              validator: Validators.compose([
-                                Validators.required('Remplire le champ'),
-                                Validators.patternString(
-                                    r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$',
-                                    'Utiliser un Mot de pass plus fort')
-                              ]),
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(),
                                   labelText: 'Password',

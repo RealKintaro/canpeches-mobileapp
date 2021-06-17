@@ -10,6 +10,7 @@ import 'package:canpeches/screens/home/home.dart';
 import 'package:canpeches/screens/importexport/export.dart';
 import 'package:canpeches/screens/importexport/import.dart';
 import 'package:canpeches/screens/login/qrcode.dart';
+import 'package:canpeches/screens/profile/profile.dart';
 import 'package:canpeches/screens/qrcode/qrcodegenerator.dart';
 import 'package:flutter/material.dart';
 import 'screens/login/login.dart';
@@ -37,6 +38,7 @@ class App extends StatelessWidget {
         '/gestCompte': (BuildContext context) => new GestCompte(),
         '/qrCode': (BuildContext context) => new QrScane(),
         '/qrGen': (BuildContext context) => new QrCodeGen(),
+        '/profile': (BuildContext context) => new Profile(),
       },
     );
   }

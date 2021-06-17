@@ -75,18 +75,21 @@ class GestCompteController extends State<GestCompte> {
           return rep;
         } else {
           setState(() {
+            visible = false;
             setErrorPrenom = false;
             setErrorMail = true;
           });
         }
       } else {
         setState(() {
+          visible = false;
           setErrorNom = false;
           setErrorPrenom = true;
         });
       }
     } else {
       setState(() {
+        visible = false;
         setErrorNom = true;
       });
     }
@@ -464,8 +467,7 @@ class GestCompteController extends State<GestCompte> {
                                                           Colors.indigo[500],
                                                       textColor: Colors.white,
                                                       fontSize: 16.0);
-                                                  Navigator.popAndPushNamed(
-                                                      context, "/homeComptes");
+                                                  Navigator.pop(context);
                                                 }
                                               });
                                             }),

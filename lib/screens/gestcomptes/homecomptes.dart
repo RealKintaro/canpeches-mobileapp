@@ -68,7 +68,7 @@ class HomeComptesController extends State<HomeComptes> {
                         'etat': comptes[index]["etat"]
                       };
 
-                      final value = await Navigator.push(
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => GestCompte()),
                       );
@@ -212,7 +212,7 @@ class HomeComptesController extends State<HomeComptes> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final value = await Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddCompte()),
           );

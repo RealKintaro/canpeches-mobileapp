@@ -24,7 +24,7 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final drawerHeader = UserAccountsDrawerHeader(
       accountEmail: Text(
-        globals.userName,
+        globals.userLastName + " " + globals.userName,
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
       ),
       accountName: Text(
@@ -48,7 +48,12 @@ class AppDrawer extends StatelessWidget {
     );
     final drawerItems = ListView(
       children: [
-        drawerHeader,
+        GestureDetector(
+          child: drawerHeader,
+          onTap: () async {
+            await newPushNamed(context, "/profile");
+          },
+        ),
         ListTile(
           title: Text(
             "Page d'accueil",
@@ -57,8 +62,8 @@ class AppDrawer extends StatelessWidget {
             Icons.home,
             size: 30,
           ),
-          onTap: () {
-            Navigator.of(context)
+          onTap: () async {
+            await Navigator.of(context)
                 .pushNamedAndRemoveUntil("/home", (route) => false);
           },
         ),
@@ -82,8 +87,8 @@ class AppDrawer extends StatelessWidget {
             AssetImage("assets/images/fish3.png"),
             size: 30,
           ),
-          onTap: () {
-            newPushNamed(context, "/homePoissons");
+          onTap: () async {
+            await newPushNamed(context, "/homePoissons");
           },
         ),
         ListTile(
@@ -94,8 +99,8 @@ class AppDrawer extends StatelessWidget {
             Icons.person,
             size: 30,
           ),
-          onTap: () {
-            newPushNamed(context, "/homeComptes");
+          onTap: () async {
+            await newPushNamed(context, "/homeComptes");
           },
         ),
         ExpansionTile(
@@ -106,8 +111,8 @@ class AppDrawer extends StatelessWidget {
           ),
           children: <Widget>[
             ListTile(
-              onTap: () {
-                newPushNamed(context, "/getAllImports");
+              onTap: () async {
+                await newPushNamed(context, "/getAllImports");
               },
               title: Text("Les Achat"),
               leading: Icon(
@@ -116,8 +121,8 @@ class AppDrawer extends StatelessWidget {
               ),
             ),
             ListTile(
-              onTap: () {
-                newPushNamed(context, "/getAllExports");
+              onTap: () async {
+                await newPushNamed(context, "/getAllExports");
               },
               title: Text("Les Vents"),
               leading: Icon(
@@ -147,8 +152,8 @@ class AppDrawer extends StatelessWidget {
             AssetImage("assets/images/profile_op.png"),
             size: 30,
           ),
-          onTap: () {
-            newPushNamed(context, "/getHistoriqueComptes");
+          onTap: () async {
+            await newPushNamed(context, "/getHistoriqueComptes");
           },
         ),
         ListTile(
@@ -159,8 +164,8 @@ class AppDrawer extends StatelessWidget {
             AssetImage("assets/images/settings.png"),
             size: 30,
           ),
-          onTap: () {
-            newPushNamed(context, "/getHistoriqueOperations");
+          onTap: () async {
+            await newPushNamed(context, "/getHistoriqueOperations");
           },
         ),
         ListTile(
@@ -169,8 +174,8 @@ class AppDrawer extends StatelessWidget {
             Icons.history,
             size: 30,
           ),
-          onTap: () {
-            newPushNamed(context, '/getHistoriqueConnections');
+          onTap: () async {
+            await newPushNamed(context, '/getHistoriqueConnections');
           },
         ),
         Row(
@@ -191,8 +196,8 @@ class AppDrawer extends StatelessWidget {
             Icons.qr_code,
             size: 30,
           ),
-          onTap: () {
-            newPushNamed(context, '/qrGen');
+          onTap: () async {
+            await newPushNamed(context, '/qrGen');
           },
         )
       ],
