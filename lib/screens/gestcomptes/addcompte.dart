@@ -294,8 +294,6 @@ class AddCompteController extends State<AddCompte> {
                         ),
                         ElevatedButton.icon(
                           onPressed: (() {
-                            BuildContext screenContext = context;
-
                             ajouterCompte();
                           }),
                           icon: Icon(Icons.person_add),

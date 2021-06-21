@@ -264,6 +264,9 @@ class HomeComptesController extends State<HomeComptes> {
               context,
               MaterialPageRoute(builder: (context) => AddCompte()),
             );
+            setState(() {
+              getComptes();
+            });
           }
         },
         child: Icon(
