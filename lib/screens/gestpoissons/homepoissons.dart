@@ -1,7 +1,6 @@
 import 'package:canpeches/screens/appdrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:canpeches/globals.dart' as globals;
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -47,7 +46,13 @@ class HomePoissonsController extends State<HomePoissons> {
   @override
   void initState() {
     super.initState();
-    getPoissons("");
+    if (globals.isConnected) {
+      getPoissons("");
+    } else {
+      setState(() {
+        visible = false;
+      });
+    }
   }
 
   @override
@@ -62,9 +67,11 @@ class HomePoissonsController extends State<HomePoissons> {
             : TextField(
                 style: TextStyle(color: Colors.white),
                 onChanged: (string) {
-                  setState(() {
-                    getPoissons(string);
-                  });
+                  if (globals.isConnected) {
+                    setState(() {
+                      getPoissons(string);
+                    });
+                  }
                 },
                 decoration: InputDecoration(
                     icon: Icon(
@@ -75,7 +82,7 @@ class HomePoissonsController extends State<HomePoissons> {
                     hintStyle: TextStyle(color: Colors.white)),
               ),
         actions: [
-          IconButton(
+          /*IconButton(
             tooltip: "Mail",
             icon: const Icon(Icons.mail),
             onPressed: () {
@@ -138,7 +145,7 @@ class HomePoissonsController extends State<HomePoissons> {
                 );
               });
             },
-          ),
+          ),*/
           !isSearching
               ? IconButton(
                   tooltip: "Recherche",
@@ -176,69 +183,105 @@ class HomePoissonsController extends State<HomePoissons> {
                           valueColor:
                               new AlwaysStoppedAnimation<Color>(Colors.white),
                         ))))
-            : ListView.builder(
-                itemCount: poissons.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      globals.poissonid = poissons[index]["id"];
-                      Navigator.pushNamed(context, "/gestPoisson");
-                    },
-                    child: Card(
-                      child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
+            : globals.isConnected
+                ? ListView.builder(
+                    itemCount: poissons.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () {
+                          globals.poissonid = poissons[index]["id"];
+                          Navigator.pushNamed(context, "/gestPoisson");
+                        },
+                        child: Card(
+                          child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  ImageIcon(
-                                    AssetImage("assets/images/fish3.png"),
-                                    color: Colors.indigo[600],
-                                    size: 30,
+                                  Row(
+                                    children: [
+                                      ImageIcon(
+                                        AssetImage("assets/images/fish3.png"),
+                                        color: Colors.indigo[600],
+                                        size: 30,
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                              5.0, 20.0, 5.0, 20.0)),
+                                      Text(
+                                        poissons[index]["name"],
+                                        style: TextStyle(
+                                          color: Colors.indigo[400],
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  Padding(
-                                      padding: EdgeInsets.fromLTRB(
-                                          5.0, 20.0, 5.0, 20.0)),
-                                  Text(
-                                    poissons[index]["name"],
-                                    style: TextStyle(
-                                      color: Colors.indigo[400],
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Nombre des Ventes: " +
+                                            poissons[index]["countvents"]!,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(right: 20)),
+                                      Text(
+                                        "Nombre des achats: " +
+                                            poissons[index]["countachats"]!,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
                                   )
                                 ],
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "Nombre des vents: " +
-                                        poissons[index]["countvents"]!,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  Padding(padding: EdgeInsets.only(right: 20)),
-                                  Text(
-                                    "Nombre des achats: " +
-                                        poissons[index]["countachats"]!,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          )),
-                    ),
-                  );
-                },
-              ),
+                              )),
+                        ),
+                      );
+                    },
+                  )
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                        globals.notConnected(),
+                        Padding(padding: EdgeInsets.only(top: 10.0)),
+                        ElevatedButton.icon(
+                          onPressed: (() {
+                            globals.isInternet().then((value) {
+                              if (value) {
+                                globals.isConnected = true;
+                                setState(() {
+                                  globals.isConnected = true;
+                                  getPoissons("");
+                                });
+                              } else {
+                                setState(() {
+                                  globals.isConnected = false;
+                                });
+                              }
+                            });
+                          }),
+                          icon: Icon(Icons.refresh),
+                          label: Text("Ressayer"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.indigo[400],
+                            shape: const BeveledRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5))),
+                            elevation: 5,
+                          ),
+                        ),
+                      ]),
       ),
       drawer: AppDrawer(),
     );

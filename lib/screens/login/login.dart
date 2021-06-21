@@ -1,8 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:connectivity/connectivity.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:dart_ipify/dart_ipify.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -26,46 +23,16 @@ class LoginController extends State<Login> {
 
   var url = globals.globalurl + "/loginback.php";
 
-  Future isInternet() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile) {
-      // I am connected to a mobile network, make sure there is actually a net connection.
-      if (await DataConnectionChecker().hasConnection) {
-        // Mobile data detected & internet connection confirmed.
-        setState(() {
-          isConnected = true;
-        });
-      } else {
-        // Mobile data detected but no internet connection found.
-        setState(() {
-          isConnected = false;
-        });
-      }
-    } else if (connectivityResult == ConnectivityResult.wifi) {
-      // I am connected to a WIFI network, make sure there is actually a net connection.
-      if (await DataConnectionChecker().hasConnection) {
-        // Wifi detected & internet connection confirmed.
-        setState(() {
-          isConnected = true;
-        });
-      } else {
-        // Wifi detected but no internet connection found.
-        setState(() {
-          isConnected = false;
-        });
-      }
-    } else {
-      // Neither mobile data or WIFI detected, not internet connection found.
-      setState(() {
-        isConnected = false;
-      });
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    isInternet();
+    globals.isInternet().then((value) {
+      if (!value) {
+        setState(() {
+          isConnected = false;
+        });
+      }
+    });
   }
 
   login(String mail, String pass) async {
@@ -91,7 +58,7 @@ class LoginController extends State<Login> {
             setErrorPass = false;
           });
 
-          final ip = await Ipify.ipv64(format: Format.TEXT);
+          final ip = await Ipify.ipv4(format: Format.TEXT);
 
           var now = DateTime.now();
 
@@ -126,14 +93,31 @@ class LoginController extends State<Login> {
             }
           } else {
             // If Email or Password did not Matched.
-
             showDialog(
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: new Text(lresponse![0]["res"]),
                   actions: <Widget>[
-                    TextButton(
+                    Center(
+                        child: Container(
+                      height: 55.0,
+                      width: 55.0,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage(
+                              "assets/images/warning.png",
+                            ),
+                            fit: BoxFit.fill),
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    )),
+                    Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
+                    Text(
+                      lresponse![0]["res"],
+                      style: TextStyle(fontSize: 15, color: Colors.red),
+                    ),
+                    ElevatedButton(
                       child: new Text("OK"),
                       onPressed: () {
                         setState(() {
@@ -263,10 +247,16 @@ class LoginController extends State<Login> {
                                   ),
                                   ElevatedButton.icon(
                                     onPressed: (() {
-                                      isInternet().then((value) {
-                                        type = "normal";
-                                        login(controllerMail.text.trim(),
-                                            controllerPass.text.trim());
+                                      globals.isInternet().then((value) {
+                                        if (value) {
+                                          type = "normal";
+                                          login(controllerMail.text.trim(),
+                                              controllerPass.text.trim());
+                                        } else {
+                                          setState(() {
+                                            isConnected = false;
+                                          });
+                                        }
                                       });
                                     }),
                                     icon: Icon(Icons.login),
@@ -284,35 +274,74 @@ class LoginController extends State<Login> {
                                   ),
                                   ElevatedButton.icon(
                                     onPressed: (() {
-                                      isInternet().then((value) {
-                                        Navigator.pushNamed(context, "/qrCode")
-                                            .then((value) {
-                                          type = "qr";
-                                          if (globals.userEmail.trim() != "" &&
-                                              globals.userPass.trim() != "") {
-                                            login(globals.userEmail.trim(),
-                                                globals.userPass.trim());
-                                          } else {
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title: new Text(
-                                                      "Qr code invalid"),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      child: new Text("OK"),
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          }
-                                        });
+                                      globals.isInternet().then((value) {
+                                        if (value) {
+                                          Navigator.pushNamed(
+                                                  context, "/qrCode")
+                                              .then((value) {
+                                            type = "qr";
+                                            if (globals.userEmail.trim() !=
+                                                    "" &&
+                                                globals.userPass.trim() != "") {
+                                              login(globals.userEmail.trim(),
+                                                  globals.userPass.trim());
+                                            } else {
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    actions: <Widget>[
+                                                      Center(
+                                                          child: Container(
+                                                        height: 55.0,
+                                                        width: 55.0,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          image: DecorationImage(
+                                                              image: AssetImage(
+                                                                "assets/images/warning.png",
+                                                              ),
+                                                              fit: BoxFit.fill),
+                                                          color: Colors
+                                                              .transparent,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                        ),
+                                                      )),
+                                                      Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: 5,
+                                                                  bottom: 5)),
+                                                      Center(
+                                                        child: Text(
+                                                          "QR CODE Invalide",
+                                                          style: TextStyle(
+                                                              fontSize: 15,
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
+                                                      ),
+                                                      TextButton(
+                                                        child: new Text("OK"),
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            }
+                                          });
+                                        } else {
+                                          setState(() {
+                                            isConnected = false;
+                                          });
+                                        }
                                       });
                                     }),
                                     icon: Icon(Icons.qr_code_scanner),
@@ -356,7 +385,17 @@ class LoginController extends State<Login> {
                                 Padding(padding: EdgeInsets.only(top: 10.0)),
                                 ElevatedButton.icon(
                                   onPressed: (() {
-                                    isInternet();
+                                    globals.isInternet().then((value) {
+                                      if (value) {
+                                        setState(() {
+                                          isConnected = true;
+                                        });
+                                      } else {
+                                        setState(() {
+                                          isConnected = false;
+                                        });
+                                      }
+                                    });
                                   }),
                                   icon: Icon(Icons.refresh),
                                   label: Text("Ressayer"),

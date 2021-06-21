@@ -41,7 +41,13 @@ class GetAllImportsController extends State<GetAllImports> {
   @override
   void initState() {
     super.initState();
-    getAllImportPoisson("");
+    if (globals.isConnected) {
+      getAllImportPoisson("");
+    } else {
+      setState(() {
+        visible = false;
+      });
+    }
   }
 
   @override
@@ -57,11 +63,13 @@ class GetAllImportsController extends State<GetAllImports> {
             tooltip: "Filtre",
             icon: const Icon(Icons.sort),
             onPressed: () {
-              pickDate(context).then((value) {
-                setState(() {
-                  getAllImportPoisson(pickedDate);
+              if (globals.isConnected) {
+                pickDate(context).then((value) {
+                  setState(() {
+                    getAllImportPoisson(pickedDate);
+                  });
                 });
-              });
+              }
             },
           ),
         ],
@@ -82,160 +90,43 @@ class GetAllImportsController extends State<GetAllImports> {
                           valueColor:
                               new AlwaysStoppedAnimation<Color>(Colors.white),
                         ))))
-            : Container(
-                child: ListView.builder(
-                  itemCount: achat.length + 1,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index == 0) {
-                      // return the header
-                      return Card(
-                          child: Padding(
-                        padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                        child: Row(
-                          children: [
-                            Padding(padding: EdgeInsets.all(2.0)),
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 5 + 35,
-                                child: Center(
-                                  child: Text('Maryeur',
-                                      style: TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black,
-                                      )),
-                                )),
-                            Padding(padding: EdgeInsets.all(2.0)),
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 5 - 5,
-                                child: Center(
-                                  child: Text('Num Etat',
-                                      style: TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black,
-                                      )),
-                                )),
-                            Padding(padding: EdgeInsets.all(2.0)),
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 5 - 20,
-                                child: Center(
-                                  child: Text('Qte',
-                                      style: TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black,
-                                      )),
-                                )),
-                            Padding(padding: EdgeInsets.all(2.0)),
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 5 - 20,
-                                child: Center(
-                                  child: Text('Rend',
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black,
-                                      )),
-                                )),
-                            Padding(padding: EdgeInsets.all(2.0)),
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 5 - 20,
-                                child: Center(
-                                  child: Text('Poids',
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black,
-                                      )),
-                                )),
-                          ],
-                        ),
-                      ));
-                    }
-                    index -= 1;
-                    if (achat.isEmpty) {
-                      return Center(
-                        child: Image.asset(
-                          "assets/images/not-found.png",
-                          fit: BoxFit.cover,
-                        ),
-                      );
-                    }
-                    return Card(
-                      child: Padding(
-                        padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Poisson: " + achat[index]["poisson"],
-                              style: TextStyle(
-                                color: Colors.indigo[900],
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            Padding(
-                                padding: EdgeInsets.only(
-                              top: 10,
-                            )),
-                            Text(
-                              "Date: " + achat[index]["date"],
-                              style: TextStyle(
-                                color: Colors.indigo[900],
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            Padding(padding: EdgeInsets.all(10.0)),
-                            Row(
+            : globals.isConnected
+                ? Container(
+                    child: ListView.builder(
+                      itemCount: achat.length + 1,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (index == 0) {
+                          // return the header
+                          return Card(
+                              child: Padding(
+                            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                            child: Row(
                               children: [
+                                Padding(padding: EdgeInsets.all(2.0)),
                                 Container(
                                     width:
                                         MediaQuery.of(context).size.width / 5 +
                                             35,
                                     child: Center(
-                                      child: Text(
-                                        achat[index]["maryeur"],
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
+                                      child: Text('Maryeur',
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                          )),
                                     )),
-                                Padding(padding: EdgeInsets.all(2.0)),
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width / 5 - 5,
-                                  child: Text(
-                                    achat[index]["netat"],
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
                                 Padding(padding: EdgeInsets.all(2.0)),
                                 Container(
                                     width:
                                         MediaQuery.of(context).size.width / 5 -
-                                            18,
+                                            5,
                                     child: Center(
-                                      child: Text(
-                                        achat[index]["qte"],
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
+                                      child: Text('Num Etat',
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                          )),
                                     )),
                                 Padding(padding: EdgeInsets.all(2.0)),
                                 Container(
@@ -243,14 +134,12 @@ class GetAllImportsController extends State<GetAllImports> {
                                         MediaQuery.of(context).size.width / 5 -
                                             20,
                                     child: Center(
-                                      child: Text(
-                                        achat[index]["rend"],
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
+                                      child: Text('Qte',
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                          )),
                                     )),
                                 Padding(padding: EdgeInsets.all(2.0)),
                                 Container(
@@ -258,24 +147,187 @@ class GetAllImportsController extends State<GetAllImports> {
                                         MediaQuery.of(context).size.width / 5 -
                                             20,
                                     child: Center(
-                                      child: Text(
-                                        achat[index]["poids"],
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
+                                      child: Text('Rend',
+                                          style: TextStyle(
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                          )),
+                                    )),
+                                Padding(padding: EdgeInsets.all(2.0)),
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 5 -
+                                            20,
+                                    child: Center(
+                                      child: Text('Poids',
+                                          style: TextStyle(
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                          )),
                                     )),
                               ],
                             ),
-                          ],
+                          ));
+                        }
+                        index -= 1;
+                        if (achat.isEmpty) {
+                          return Center(
+                            child: Image.asset(
+                              "assets/images/not-found.png",
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        }
+                        return Card(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Poisson: " + achat[index]["poisson"],
+                                  style: TextStyle(
+                                    color: Colors.indigo[900],
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                  top: 10,
+                                )),
+                                Text(
+                                  "Date: " + achat[index]["date"],
+                                  style: TextStyle(
+                                    color: Colors.indigo[900],
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                Padding(padding: EdgeInsets.all(10.0)),
+                                Row(
+                                  children: [
+                                    Container(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                    5 +
+                                                35,
+                                        child: Center(
+                                          child: Text(
+                                            achat[index]["maryeur"],
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        )),
+                                    Padding(padding: EdgeInsets.all(2.0)),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width /
+                                              5 -
+                                          5,
+                                      child: Text(
+                                        achat[index]["netat"],
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(padding: EdgeInsets.all(2.0)),
+                                    Container(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                    5 -
+                                                18,
+                                        child: Center(
+                                          child: Text(
+                                            achat[index]["qte"],
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        )),
+                                    Padding(padding: EdgeInsets.all(2.0)),
+                                    Container(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                    5 -
+                                                20,
+                                        child: Center(
+                                          child: Text(
+                                            achat[index]["rend"],
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        )),
+                                    Padding(padding: EdgeInsets.all(2.0)),
+                                    Container(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                    5 -
+                                                20,
+                                        child: Center(
+                                          child: Text(
+                                            achat[index]["poids"],
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        )),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                        globals.notConnected(),
+                        Padding(padding: EdgeInsets.only(top: 10.0)),
+                        ElevatedButton.icon(
+                          onPressed: (() {
+                            globals.isInternet().then((value) {
+                              if (value) {
+                                setState(() {
+                                  globals.isConnected = true;
+                                  getAllImportPoisson("");
+                                });
+                              } else {
+                                setState(() {
+                                  globals.isConnected = false;
+                                });
+                              }
+                            });
+                          }),
+                          icon: Icon(Icons.refresh),
+                          label: Text("Ressayer"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.indigo[400],
+                            shape: const BeveledRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5))),
+                            elevation: 5,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              ),
+                      ]),
       ),
     );
   }

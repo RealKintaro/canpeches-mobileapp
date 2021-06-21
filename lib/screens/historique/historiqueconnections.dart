@@ -43,7 +43,13 @@ class HistoriqueConnectionController extends State<HistoriqueConnection> {
   @override
   void initState() {
     super.initState();
-    getHistoriqueCompte("");
+    if (globals.isConnected) {
+      getHistoriqueCompte("");
+    } else {
+      setState(() {
+        visible = false;
+      });
+    }
   }
 
   @override
@@ -62,11 +68,13 @@ class HistoriqueConnectionController extends State<HistoriqueConnection> {
             tooltip: "Filtre",
             icon: const Icon(Icons.sort),
             onPressed: () {
-              pickDate(context).then((value) {
-                setState(() {
-                  getHistoriqueCompte(pickedDate);
+              if (globals.isConnected) {
+                pickDate(context).then((value) {
+                  setState(() {
+                    getHistoriqueCompte(pickedDate);
+                  });
                 });
-              });
+              }
             },
           ),
         ],
@@ -87,87 +95,122 @@ class HistoriqueConnectionController extends State<HistoriqueConnection> {
                           valueColor:
                               new AlwaysStoppedAnimation<Color>(Colors.white),
                         ))))
-            : ListView.builder(
-                itemCount: historiqueConnection.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                    child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
+            : globals.isConnected
+                ? ListView.builder(
+                    itemCount: historiqueConnection.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                        child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(
-                                  Icons.history,
-                                  size: 30.0,
-                                  color: Colors.indigo[600],
-                                ),
-                                Padding(padding: EdgeInsets.all(10.0)),
-                                Text(
-                                  "Email:",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.indigo[400],
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                Padding(padding: EdgeInsets.only(right: 10.0)),
-                                Text(
-                                  historiqueConnection[index]["email"],
-                                  style: TextStyle(
-                                    color: Colors.indigo[400],
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                )
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.all(2.5)),
-                            Row(
-                              children: [
-                                Text(
-                                  "Date:",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.indigo[400],
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.history,
+                                      size: 30.0,
+                                      color: Colors.indigo[600],
+                                    ),
+                                    Padding(padding: EdgeInsets.all(10.0)),
+                                    Text(
+                                      "Email:",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.indigo[400],
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(right: 10.0)),
+                                    Text(
+                                      historiqueConnection[index]["email"],
+                                      style: TextStyle(
+                                        color: Colors.indigo[400],
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    )
+                                  ],
                                 ),
                                 Padding(padding: EdgeInsets.all(2.5)),
-                                Text(
-                                  historiqueConnection[index]["date"],
-                                  style: TextStyle(
-                                    fontSize: 12.5,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                Padding(padding: EdgeInsets.all(5)),
-                                Text(
-                                  "IP:",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.indigo[400],
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                Padding(padding: EdgeInsets.all(2.5)),
-                                Text(
-                                  historiqueConnection[index]["ip"],
-                                  style: TextStyle(
-                                    fontSize: 12.5,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Date:",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.indigo[400],
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Padding(padding: EdgeInsets.all(2.5)),
+                                    Text(
+                                      historiqueConnection[index]["date"],
+                                      style: TextStyle(
+                                        fontSize: 12.5,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Padding(padding: EdgeInsets.all(5)),
+                                    Text(
+                                      "IP:",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.indigo[400],
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Padding(padding: EdgeInsets.all(2.5)),
+                                    Text(
+                                      historiqueConnection[index]["ip"],
+                                      style: TextStyle(
+                                        fontSize: 12.5,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
-                            ),
-                          ],
-                        )),
-                  );
-                },
-              ),
+                            )),
+                      );
+                    },
+                  )
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                        globals.notConnected(),
+                        Padding(padding: EdgeInsets.only(top: 10.0)),
+                        ElevatedButton.icon(
+                          onPressed: (() {
+                            globals.isInternet().then((value) {
+                              if (value) {
+                                setState(() {
+                                  globals.isConnected = true;
+                                  getHistoriqueCompte("");
+                                });
+                              } else {
+                                setState(() {
+                                  globals.isConnected = false;
+                                });
+                              }
+                            });
+                          }),
+                          icon: Icon(Icons.refresh),
+                          label: Text("Ressayer"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.indigo[400],
+                            shape: const BeveledRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5))),
+                            elevation: 5,
+                          ),
+                        ),
+                      ]),
       ),
       drawer: AppDrawer(),
     );

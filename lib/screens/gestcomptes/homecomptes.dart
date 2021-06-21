@@ -26,7 +26,13 @@ class HomeComptesController extends State<HomeComptes> {
   @override
   void initState() {
     super.initState();
-    getComptes();
+    if (globals.isConnected) {
+      getComptes();
+    } else {
+      setState(() {
+        visible = false;
+      });
+    }
   }
 
   @override
@@ -55,170 +61,210 @@ class HomeComptesController extends State<HomeComptes> {
                           valueColor:
                               new AlwaysStoppedAnimation<Color>(Colors.white),
                         ))))
-            : ListView.builder(
-                itemCount: comptes.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () async {
-                      globals.compteInfo = {
-                        'id': comptes[index]["id"],
-                        'nom': comptes[index]["nom"],
-                        'prenom': comptes[index]["prenom"],
-                        'email': comptes[index]["email"],
-                        'etat': comptes[index]["etat"]
-                      };
+            : globals.isConnected
+                ? ListView.builder(
+                    itemCount: comptes.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () async {
+                          globals.compteInfo = {
+                            'id': comptes[index]["id"],
+                            'nom': comptes[index]["nom"],
+                            'prenom': comptes[index]["prenom"],
+                            'email': comptes[index]["email"],
+                            'etat': comptes[index]["etat"]
+                          };
 
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => GestCompte()),
-                      );
-                      setState(() {
-                        getComptes();
-                      });
-                    },
-                    child: Card(
-                      child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Column(
-                            children: [
-                              Row(
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => GestCompte()),
+                          );
+                          setState(() {
+                            getComptes();
+                          });
+                        },
+                        child: Card(
+                          child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
                                 children: [
-                                  Text(
-                                    "Nom et Prenom: ",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  Padding(padding: EdgeInsets.only(right: 5.0)),
-                                  Text(
-                                    comptes[index]["nom"],
-                                    style: TextStyle(
-                                      color: Colors.indigo[400],
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  Padding(padding: EdgeInsets.only(right: 2.5)),
-                                  Text(
-                                    comptes[index]["prenom"],
-                                    style: TextStyle(
-                                      color: Colors.indigo[400],
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Padding(padding: EdgeInsets.all(3.0)),
-                              Row(
-                                children: [
-                                  Text(
-                                    "Email:",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  Padding(padding: EdgeInsets.only(right: 5.0)),
-                                  Text(
-                                    comptes[index]["email"],
-                                    style: TextStyle(
-                                      color: Colors.indigo[400],
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Padding(padding: EdgeInsets.all(3.0)),
-                              Row(
-                                children: [
-                                  Text(
-                                    "Etat:",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  Padding(padding: EdgeInsets.only(right: 5.0)),
-                                  comptes[index]["etat"] == "1"
-                                      ? Text(
-                                          "Active",
-                                          style: TextStyle(
-                                            color: Colors.greenAccent[400],
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        )
-                                      : Text(
-                                          "Desactive",
-                                          style: TextStyle(
-                                            color: Colors.red[800],
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w600,
-                                          ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Nom et Prenom: ",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w600,
                                         ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "Etat:",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(right: 5.0)),
+                                      Text(
+                                        comptes[index]["nom"],
+                                        style: TextStyle(
+                                          color: Colors.indigo[400],
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(right: 2.5)),
+                                      Text(
+                                        comptes[index]["prenom"],
+                                        style: TextStyle(
+                                          color: Colors.indigo[400],
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Padding(padding: EdgeInsets.only(right: 5.0)),
-                                  comptes[index]["role"] == "0"
-                                      ? Text(
-                                          "Admin",
-                                          style: TextStyle(
-                                            color: Colors.indigo[400],
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        )
-                                      : comptes[index]["role"] == "1"
+                                  Padding(padding: EdgeInsets.all(3.0)),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Email:",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(right: 5.0)),
+                                      Text(
+                                        comptes[index]["email"],
+                                        style: TextStyle(
+                                          color: Colors.indigo[400],
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Padding(padding: EdgeInsets.all(3.0)),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Etat:",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(right: 5.0)),
+                                      comptes[index]["etat"] == "1"
                                           ? Text(
-                                              "SuperAdmin",
+                                              "Active",
                                               style: TextStyle(
-                                                color: Colors.indigo[400],
+                                                color: Colors.greenAccent[400],
                                                 fontSize: 14.0,
                                                 fontWeight: FontWeight.w600,
                                               ),
                                             )
                                           : Text(
-                                              "null",
+                                              "Desactive",
+                                              style: TextStyle(
+                                                color: Colors.red[800],
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Etat:",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      Padding(
+                                          padding: EdgeInsets.only(right: 5.0)),
+                                      comptes[index]["role"] == "0"
+                                          ? Text(
+                                              "Admin",
                                               style: TextStyle(
                                                 color: Colors.indigo[400],
                                                 fontSize: 14.0,
                                                 fontWeight: FontWeight.w600,
                                               ),
                                             )
+                                          : comptes[index]["role"] == "1"
+                                              ? Text(
+                                                  "SuperAdmin",
+                                                  style: TextStyle(
+                                                    color: Colors.indigo[400],
+                                                    fontSize: 14.0,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                )
+                                              : Text(
+                                                  "null",
+                                                  style: TextStyle(
+                                                    color: Colors.indigo[400],
+                                                    fontSize: 14.0,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                )
+                                    ],
+                                  ),
                                 ],
-                              ),
-                            ],
-                          )),
-                    ),
-                  );
-                },
-              ),
+                              )),
+                        ),
+                      );
+                    },
+                  )
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                        globals.notConnected(),
+                        Padding(padding: EdgeInsets.only(top: 10.0)),
+                        ElevatedButton.icon(
+                          onPressed: (() {
+                            globals.isInternet().then((value) {
+                              if (value) {
+                                globals.isConnected = true;
+                                setState(() {
+                                  globals.isConnected = true;
+                                  getComptes();
+                                });
+                              } else {
+                                setState(() {
+                                  globals.isConnected = false;
+                                });
+                              }
+                            });
+                          }),
+                          icon: Icon(Icons.refresh),
+                          label: Text("Ressayer"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.indigo[400],
+                            shape: const BeveledRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5))),
+                            elevation: 5,
+                          ),
+                        ),
+                      ]),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddCompte()),
-          );
-          setState(() {
-            getComptes();
-          });
+          if (globals.isConnected) {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddCompte()),
+            );
+          }
         },
         child: Icon(
           Icons.add,

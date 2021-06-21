@@ -92,7 +92,7 @@ class GestPoissonsController extends State<GestPoissons> {
                 child: Text("Achats"),
               ),
               Tab(
-                child: Text("Vents"),
+                child: Text("Ventes"),
               ),
             ],
           ),

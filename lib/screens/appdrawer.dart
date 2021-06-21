@@ -4,7 +4,11 @@ import "package:canpeches/globals.dart" as globals;
 
 // Press the Navigation Drawer button to the left of AppBar to show
 // a simple Drawer with two items.
-class AppDrawer extends StatelessWidget {
+class AppDrawer extends StatefulWidget {
+  AppDrawerController createState() => AppDrawerController();
+}
+
+class AppDrawerController extends State<AppDrawer> {
   newPushNamed(BuildContext context, String route) {
     final newRouteName = route;
     bool isNewRouteSameAsCurrent = false;
@@ -15,9 +19,23 @@ class AppDrawer extends StatelessWidget {
       }
       return true;
     });
-    if (!isNewRouteSameAsCurrent) {
-      Navigator.pushNamed(context, newRouteName);
-    }
+    globals.isInternet().then((value) async {
+      if (value) {
+        setState(() {
+          globals.isConnected = true;
+        });
+        if (!isNewRouteSameAsCurrent) {
+          Navigator.pushNamed(context, newRouteName);
+        }
+      } else {
+        setState(() {
+          globals.isConnected = false;
+        });
+        if (!isNewRouteSameAsCurrent) {
+          Navigator.pushNamed(context, newRouteName);
+        }
+      }
+    });
   }
 
   @override
@@ -63,8 +81,21 @@ class AppDrawer extends StatelessWidget {
             size: 30,
           ),
           onTap: () async {
-            await Navigator.of(context)
-                .pushNamedAndRemoveUntil("/home", (route) => false);
+            globals.isInternet().then((value) async {
+              if (value) {
+                setState(() {
+                  globals.isConnected = true;
+                });
+                await Navigator.of(context)
+                    .pushNamedAndRemoveUntil("/home", (route) => false);
+              } else {
+                setState(() {
+                  globals.isConnected = false;
+                });
+                await Navigator.of(context)
+                    .pushNamedAndRemoveUntil("/home", (route) => false);
+              }
+            });
           },
         ),
         Row(
@@ -104,7 +135,7 @@ class AppDrawer extends StatelessWidget {
           },
         ),
         ExpansionTile(
-          title: Text("Achats/Vents"),
+          title: Text("Achats/Ventes"),
           leading: Icon(
             Icons.import_export_rounded,
             size: 30,
@@ -124,7 +155,7 @@ class AppDrawer extends StatelessWidget {
               onTap: () async {
                 await newPushNamed(context, "/getAllExports");
               },
-              title: Text("Les Vents"),
+              title: Text("Les Ventes"),
               leading: Icon(
                 Icons.arrow_upward_rounded,
                 size: 30,

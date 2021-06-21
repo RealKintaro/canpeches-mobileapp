@@ -21,13 +21,13 @@ class AddCompteController extends State<AddCompte> {
 
   late String resaddmsg;
   String? _selectedRole;
-  Future<String> ajouterCompte() async {
+  Future ajouterCompte() async {
     String email, password, nom, prenom;
     email = controllerMail.text;
     password = controllerPass.text;
     nom = controllerNom.text;
     prenom = controllerPrenom.text;
-
+    BuildContext screenContext = context;
     var url = globals.globalurl + "/addCompte.php";
 
     bool emailValid = RegExp(
@@ -40,6 +40,12 @@ class AddCompteController extends State<AddCompte> {
       if (prenom != "") {
         if (emailValid) {
           if (passwordValid) {
+            setState(() {
+              setErrorPrenom = false;
+              setErrorMail = false;
+              setErrorNom = false;
+              setErrorPass = false;
+            });
             var data = {
               'curruser': globals.userEmail,
               'nom': nom,
@@ -52,35 +58,79 @@ class AddCompteController extends State<AddCompte> {
                       ? "1"
                       : "99"
             };
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  actions: <Widget>[
+                    Center(
+                        child: Container(
+                      height: 55.0,
+                      width: 55.0,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage(
+                              "assets/images/add-user.png",
+                            ),
+                            fit: BoxFit.fill),
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    )),
+                    Padding(padding: EdgeInsets.only(top: 5, bottom: 5)),
+                    Center(
+                      child: Text(
+                        "Voulez-vous ajouter ce compte?",
+                        style: TextStyle(fontSize: 15, color: Colors.black),
+                      ),
+                    ),
+                    TextButton(
+                      child: new Text("OK"),
+                      onPressed: () async {
+                        var response = await http.post(Uri.parse(url),
+                            body: json.encode(data));
+                        var rep = jsonDecode(response.body);
 
-            var response =
-                await http.post(Uri.parse(url), body: json.encode(data));
-            var rep = jsonDecode(response.body);
-            return rep;
+                        Fluttertoast.showToast(
+                            msg: rep.toString(),
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.SNACKBAR,
+                            timeInSecForIosWeb: 3,
+                            backgroundColor: Colors.indigo[500],
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                        Navigator.pop(context);
+                        Navigator.pop(screenContext);
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
           } else {
             setState(() {
-              setErrorMail = false;
+              setErrorMail = setErrorNom = setErrorPrenom = false;
               setErrorPass = true;
             });
           }
         } else {
           setState(() {
-            setErrorPrenom = false;
+            setErrorPass = setErrorNom = setErrorPrenom = false;
             setErrorMail = true;
           });
         }
       } else {
         setState(() {
-          setErrorNom = false;
+          setErrorPass = setErrorNom = setErrorMail = false;
           setErrorPrenom = true;
         });
       }
     } else {
       setState(() {
+        setErrorPass = setErrorPrenom = setErrorMail = false;
         setErrorNom = true;
       });
     }
-    return "";
   }
 
   @override
@@ -205,7 +255,7 @@ class AddCompteController extends State<AddCompte> {
                                   border: OutlineInputBorder(),
                                   labelText: 'Password',
                                   errorText: setErrorPass
-                                      ? "Remplire le champ."
+                                      ? "Le mot de passe doit contenir 8 caractères,\n au moins 1 majuscule et 1 chiffre!"
                                       : null,
                                   suffixIcon: IconButton(
                                       icon: Icon(_obscureText
@@ -244,22 +294,9 @@ class AddCompteController extends State<AddCompte> {
                         ),
                         ElevatedButton.icon(
                           onPressed: (() {
-                            ajouterCompte().then((String value) {
-                              resaddmsg = value;
-                              if (resaddmsg == "Bien ajouter" ||
-                                  resaddmsg == "Non ajouter" ||
-                                  resaddmsg == "Email deja utilise") {
-                                Fluttertoast.showToast(
-                                    msg: resaddmsg,
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.SNACKBAR,
-                                    timeInSecForIosWeb: 3,
-                                    backgroundColor: Colors.indigo[500],
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
-                                Navigator.pop(context);
-                              }
-                            });
+                            BuildContext screenContext = context;
+
+                            ajouterCompte();
                           }),
                           icon: Icon(Icons.person_add),
                           label: Text("Ajouter"),

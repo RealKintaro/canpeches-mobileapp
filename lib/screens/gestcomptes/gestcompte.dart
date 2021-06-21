@@ -405,7 +405,6 @@ class GestCompteController extends State<GestCompte> {
                                                 etat = "1";
                                               }
                                               isSwitched = value;
-                                              print(etat);
                                             });
                                           },
                                           activeTrackColor: Colors.indigo[700],
@@ -419,27 +418,89 @@ class GestCompteController extends State<GestCompte> {
                                         children: [
                                           ElevatedButton.icon(
                                             onPressed: (() {
-                                              modifierCompte()
-                                                  .then((String value) {
-                                                resaddmsg = value;
-                                                if (resaddmsg ==
-                                                        "Bien modifier" ||
-                                                    resaddmsg ==
-                                                        "Non modifier") {
-                                                  Fluttertoast.showToast(
-                                                      msg: resaddmsg,
-                                                      toastLength:
-                                                          Toast.LENGTH_SHORT,
-                                                      gravity:
-                                                          ToastGravity.SNACKBAR,
-                                                      timeInSecForIosWeb: 3,
-                                                      backgroundColor:
-                                                          Colors.indigo[500],
-                                                      textColor: Colors.white,
-                                                      fontSize: 16.0);
-                                                  Navigator.pop(context);
-                                                }
-                                              });
+                                              BuildContext screenContext =
+                                                  context;
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    actions: <Widget>[
+                                                      Center(
+                                                          child: Container(
+                                                        height: 55.0,
+                                                        width: 55.0,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          image: DecorationImage(
+                                                              image: AssetImage(
+                                                                "assets/images/user.png",
+                                                              ),
+                                                              fit: BoxFit.fill),
+                                                          color: Colors
+                                                              .transparent,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                        ),
+                                                      )),
+                                                      Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: 5,
+                                                                  bottom: 5)),
+                                                      Center(
+                                                        child: Text(
+                                                          "Voulez-vous modifier ce compte?",
+                                                          style: TextStyle(
+                                                              fontSize: 15,
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                      ),
+                                                      TextButton(
+                                                        child: new Text("OK"),
+                                                        onPressed: () {
+                                                          modifierCompte().then(
+                                                              (String value) {
+                                                            resaddmsg = value;
+                                                            if (resaddmsg ==
+                                                                    "Bien modifier" ||
+                                                                resaddmsg ==
+                                                                    "Non modifier") {
+                                                              Fluttertoast.showToast(
+                                                                  msg:
+                                                                      resaddmsg,
+                                                                  toastLength: Toast
+                                                                      .LENGTH_SHORT,
+                                                                  gravity:
+                                                                      ToastGravity
+                                                                          .SNACKBAR,
+                                                                  timeInSecForIosWeb:
+                                                                      3,
+                                                                  backgroundColor:
+                                                                      Colors.indigo[
+                                                                          500],
+                                                                  textColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  fontSize:
+                                                                      16.0);
+                                                              Navigator.pop(
+                                                                  context);
+                                                              Navigator.pop(
+                                                                  screenContext);
+                                                            } else {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            }
+                                                          });
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
                                             }),
                                             icon: Icon(Icons.person_add),
                                             label: Text("Modifier"),
@@ -453,23 +514,87 @@ class GestCompteController extends State<GestCompte> {
                                                   EdgeInsets.only(right: 15)),
                                           ElevatedButton.icon(
                                             onPressed: (() {
-                                              deleteCompte().then((value) {
-                                                if (value == "Bien supprimer" ||
-                                                    value == "Non supprimer") {
-                                                  Fluttertoast.showToast(
-                                                      msg: value,
-                                                      toastLength:
-                                                          Toast.LENGTH_SHORT,
-                                                      gravity:
-                                                          ToastGravity.SNACKBAR,
-                                                      timeInSecForIosWeb: 3,
-                                                      backgroundColor:
-                                                          Colors.indigo[500],
-                                                      textColor: Colors.white,
-                                                      fontSize: 16.0);
-                                                  Navigator.pop(context);
-                                                }
-                                              });
+                                              BuildContext screenContext =
+                                                  context;
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    actions: <Widget>[
+                                                      Center(
+                                                          child: Container(
+                                                        height: 55.0,
+                                                        width: 55.0,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          image: DecorationImage(
+                                                              image: AssetImage(
+                                                                "assets/images/delete-account.png",
+                                                              ),
+                                                              fit: BoxFit.fill),
+                                                          color: Colors
+                                                              .transparent,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                        ),
+                                                      )),
+                                                      Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  top: 5,
+                                                                  bottom: 5)),
+                                                      Center(
+                                                        child: Text(
+                                                          "Voulez-vous supprimer ce compte?",
+                                                          style: TextStyle(
+                                                              fontSize: 15,
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
+                                                      ),
+                                                      TextButton(
+                                                        child: new Text("OK"),
+                                                        onPressed: () {
+                                                          deleteCompte()
+                                                              .then((value) {
+                                                            if (value ==
+                                                                    "Bien supprimer" ||
+                                                                value ==
+                                                                    "Non supprimer") {
+                                                              Fluttertoast.showToast(
+                                                                  msg: value,
+                                                                  toastLength: Toast
+                                                                      .LENGTH_SHORT,
+                                                                  gravity:
+                                                                      ToastGravity
+                                                                          .SNACKBAR,
+                                                                  timeInSecForIosWeb:
+                                                                      3,
+                                                                  backgroundColor:
+                                                                      Colors.indigo[
+                                                                          500],
+                                                                  textColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  fontSize:
+                                                                      16.0);
+                                                              Navigator.pop(
+                                                                  context);
+                                                              Navigator.pop(
+                                                                  screenContext);
+                                                            } else {
+                                                              Navigator.pop(
+                                                                  context);
+                                                            }
+                                                          });
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
                                             }),
                                             icon: Icon(Icons.person_remove),
                                             label: Text("Supprimer"),

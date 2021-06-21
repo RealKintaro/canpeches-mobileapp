@@ -43,7 +43,13 @@ class HistoriqueOperationsController extends State<HistoriqueOperations> {
   @override
   void initState() {
     super.initState();
-    getHistoriqueCompte("");
+    if (globals.isConnected) {
+      getHistoriqueCompte("");
+    } else {
+      setState(() {
+        visible = false;
+      });
+    }
   }
 
   @override
@@ -62,11 +68,13 @@ class HistoriqueOperationsController extends State<HistoriqueOperations> {
             tooltip: "Filtre",
             icon: const Icon(Icons.sort),
             onPressed: () {
-              pickDate(context).then((value) {
-                setState(() {
-                  getHistoriqueCompte(pickedDate);
+              if (globals.isConnected) {
+                pickDate(context).then((value) {
+                  setState(() {
+                    getHistoriqueCompte(pickedDate);
+                  });
                 });
-              });
+              }
             },
           ),
         ],
@@ -87,83 +95,118 @@ class HistoriqueOperationsController extends State<HistoriqueOperations> {
                           valueColor:
                               new AlwaysStoppedAnimation<Color>(Colors.white),
                         ))))
-            : ListView.builder(
-                itemCount: historiqueOperation.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                    child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
+            : globals.isConnected
+                ? ListView.builder(
+                    itemCount: historiqueOperation.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                        child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(
-                                  Icons.history,
-                                  size: 30.0,
-                                  color: Colors.indigo[600],
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.history,
+                                      size: 30.0,
+                                      color: Colors.indigo[600],
+                                    ),
+                                    Padding(padding: EdgeInsets.all(10.0)),
+                                    Text(
+                                      "Email:",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.indigo[400],
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(right: 10.0)),
+                                    Text(
+                                      historiqueOperation[index]["email"],
+                                      style: TextStyle(
+                                        color: Colors.indigo[400],
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                Padding(padding: EdgeInsets.all(10.0)),
+                                Padding(padding: EdgeInsets.all(2.5)),
                                 Text(
-                                  "Email:",
+                                  "Action:",
                                   style: TextStyle(
                                     fontSize: 15,
                                     color: Colors.indigo[400],
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                                Padding(padding: EdgeInsets.only(right: 10.0)),
+                                Padding(padding: EdgeInsets.all(2.5)),
                                 Text(
-                                  historiqueOperation[index]["email"],
+                                  historiqueOperation[index]["action"],
                                   style: TextStyle(
-                                    color: Colors.indigo[400],
-                                    fontSize: 15.0,
+                                    fontSize: 12.5,
+                                    color: Colors.black,
                                     fontWeight: FontWeight.w700,
                                   ),
-                                )
+                                ),
+                                Padding(padding: EdgeInsets.all(2.5)),
+                                Text(
+                                  "Date:",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.indigo[400],
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                Padding(padding: EdgeInsets.all(2.5)),
+                                Text(
+                                  historiqueOperation[index]["date"],
+                                  style: TextStyle(
+                                    fontSize: 12.5,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
                               ],
-                            ),
-                            Padding(padding: EdgeInsets.all(2.5)),
-                            Text(
-                              "Action:",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.indigo[400],
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Padding(padding: EdgeInsets.all(2.5)),
-                            Text(
-                              historiqueOperation[index]["action"],
-                              style: TextStyle(
-                                fontSize: 12.5,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Padding(padding: EdgeInsets.all(2.5)),
-                            Text(
-                              "Date:",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.indigo[400],
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Padding(padding: EdgeInsets.all(2.5)),
-                            Text(
-                              historiqueOperation[index]["date"],
-                              style: TextStyle(
-                                fontSize: 12.5,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                        )),
-                  );
-                },
-              ),
+                            )),
+                      );
+                    },
+                  )
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                        globals.notConnected(),
+                        Padding(padding: EdgeInsets.only(top: 10.0)),
+                        ElevatedButton.icon(
+                          onPressed: (() {
+                            globals.isInternet().then((value) {
+                              if (value) {
+                                setState(() {
+                                  globals.isConnected = true;
+                                  getHistoriqueCompte("");
+                                });
+                              } else {
+                                setState(() {
+                                  globals.isConnected = false;
+                                });
+                              }
+                            });
+                          }),
+                          icon: Icon(Icons.refresh),
+                          label: Text("Ressayer"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.indigo[400],
+                            shape: const BeveledRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5))),
+                            elevation: 5,
+                          ),
+                        ),
+                      ]),
       ),
       drawer: AppDrawer(),
     );

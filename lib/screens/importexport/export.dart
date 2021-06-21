@@ -41,7 +41,13 @@ class GetAllExportsController extends State<GetAllExports> {
   @override
   void initState() {
     super.initState();
-    getAllExportsPoisson("");
+    if (globals.isConnected) {
+      getAllExportsPoisson("");
+    } else {
+      setState(() {
+        visible = false;
+      });
+    }
   }
 
   @override
@@ -50,18 +56,20 @@ class GetAllExportsController extends State<GetAllExports> {
       appBar: AppBar(
         backgroundColor: Colors.indigo[900],
         title: Text(
-          "Les Vents",
+          "Les Ventes",
         ),
         actions: [
           IconButton(
             tooltip: "Filtre",
             icon: const Icon(Icons.sort),
             onPressed: () {
-              pickDate(context).then((value) {
-                setState(() {
-                  getAllExportsPoisson(pickedDate);
+              if (globals.isConnected) {
+                pickDate(context).then((value) {
+                  setState(() {
+                    getAllExportsPoisson(pickedDate);
+                  });
                 });
-              });
+              }
             },
           ),
         ],
@@ -82,180 +90,222 @@ class GetAllExportsController extends State<GetAllExports> {
                           valueColor:
                               new AlwaysStoppedAnimation<Color>(Colors.white),
                         ))))
-            : Container(
-                child: ListView.builder(
-                  itemCount: vents.length + 1,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index == 0) {
-                      // return the header
-                      return Card(
-                          child: Padding(
-                        padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                        child: Row(
-                          children: [
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 4 - 30,
-                                child: Center(
-                                  child: Text('Poids',
-                                      style: TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black,
-                                      )),
-                                )),
-                            Padding(padding: EdgeInsets.all(2.0)),
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 4 + 10,
-                                child: Center(
-                                  child: Text('Client',
-                                      style: TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black,
-                                      )),
-                                )),
-                            Padding(padding: EdgeInsets.all(2.0)),
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 4 + 10,
-                                child: Center(
-                                  child: Text('Exporateur',
-                                      style: TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black,
-                                      )),
-                                )),
-                            Padding(padding: EdgeInsets.all(2.0)),
-                            Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 4 - 10,
-                                child: Center(
-                                  child: Text('NCS',
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black,
-                                      )),
-                                )),
-                          ],
-                        ),
-                      ));
-                    }
-                    index -= 1;
-                    if (vents.isEmpty) {
-                      return Container(
-                        width: 69,
-                        height: 69,
-                        child: Center(
-                          child: Image.asset(
-                            "assets/images/not-found.png",
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      );
-                    }
-                    return Card(
-                      child: Padding(
-                          padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+            : globals.isConnected
+                ? Container(
+                    child: ListView.builder(
+                      itemCount: vents.length + 1,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (index == 0) {
+                          // return the header
+                          return Card(
+                              child: Padding(
+                            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+                            child: Row(
                               children: [
-                                Text(
-                                  "Poisson: " + vents[index]["poisson"],
-                                  style: TextStyle(
-                                    color: Colors.indigo[900],
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                Padding(
-                                    padding: EdgeInsets.only(
-                                  top: 10,
-                                )),
-                                Text(
-                                  "Date: " + vents[index]["date"],
-                                  style: TextStyle(
-                                    color: Colors.indigo[900],
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                Padding(padding: EdgeInsets.all(10.0)),
-                                Row(
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 4 -
+                                            30,
+                                    child: Center(
+                                      child: Text('Poids',
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                          )),
+                                    )),
+                                Padding(padding: EdgeInsets.all(2.0)),
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 4 +
+                                            10,
+                                    child: Center(
+                                      child: Text('Client',
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                          )),
+                                    )),
+                                Padding(padding: EdgeInsets.all(2.0)),
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 4 +
+                                            10,
+                                    child: Center(
+                                      child: Text('Exporateur',
+                                          style: TextStyle(
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                          )),
+                                    )),
+                                Padding(padding: EdgeInsets.all(2.0)),
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width / 4 -
+                                            10,
+                                    child: Center(
+                                      child: Text('NCS',
+                                          style: TextStyle(
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
+                                          )),
+                                    )),
+                              ],
+                            ),
+                          ));
+                        }
+                        index -= 1;
+                        if (vents.isEmpty) {
+                          return Container(
+                            width: 69,
+                            height: 69,
+                            child: Center(
+                              child: Image.asset(
+                                "assets/images/not-found.png",
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          );
+                        }
+                        return Card(
+                          child: Padding(
+                              padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
+                                    Text(
+                                      "Poisson: " + vents[index]["poisson"],
+                                      style: TextStyle(
+                                        color: Colors.indigo[900],
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                      top: 10,
+                                    )),
+                                    Text(
+                                      "Date: " + vents[index]["date"],
+                                      style: TextStyle(
+                                        color: Colors.indigo[900],
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Padding(padding: EdgeInsets.all(10.0)),
+                                    Row(
+                                      children: [
+                                        Container(
+                                            width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
                                                     4 -
                                                 30,
-                                        child: Center(
-                                          child: Text(
-                                            vents[index]["poids"],
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 15.0,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        )),
-                                    Padding(padding: EdgeInsets.all(2.0)),
-                                    Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
+                                            child: Center(
+                                              child: Text(
+                                                vents[index]["poids"],
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            )),
+                                        Padding(padding: EdgeInsets.all(2.0)),
+                                        Container(
+                                            width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
                                                     4 +
                                                 10,
-                                        child: Center(
-                                          child: Text(
-                                            vents[index]["client"],
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 15.0,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        )),
-                                    Padding(padding: EdgeInsets.all(2.0)),
-                                    Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
+                                            child: Center(
+                                              child: Text(
+                                                vents[index]["client"],
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            )),
+                                        Padding(padding: EdgeInsets.all(2.0)),
+                                        Container(
+                                            width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
                                                     4 +
                                                 10,
-                                        child: Center(
-                                          child: Text(
-                                            vents[index]["exportateur"],
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 15.0,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        )),
-                                    Padding(padding: EdgeInsets.all(2.0)),
-                                    Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
+                                            child: Center(
+                                              child: Text(
+                                                vents[index]["exportateur"],
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            )),
+                                        Padding(padding: EdgeInsets.all(2.0)),
+                                        Container(
+                                            width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
                                                     4 -
                                                 10,
-                                        child: Center(
-                                          child: Text(
-                                            vents[index]["ncs"],
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 15.0,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        )),
-                                  ],
-                                ),
-                              ])),
-                    );
-                  },
-                ),
-              ),
+                                            child: Center(
+                                              child: Text(
+                                                vents[index]["ncs"],
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            )),
+                                      ],
+                                    ),
+                                  ])),
+                        );
+                      },
+                    ),
+                  )
+                : Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                        globals.notConnected(),
+                        Padding(padding: EdgeInsets.only(top: 10.0)),
+                        ElevatedButton.icon(
+                          onPressed: (() {
+                            globals.isInternet().then((value) {
+                              if (value) {
+                                setState(() {
+                                  globals.isConnected = true;
+                                  getAllExportsPoisson("");
+                                });
+                              } else {
+                                setState(() {
+                                  globals.isConnected = false;
+                                });
+                              }
+                            });
+                          }),
+                          icon: Icon(Icons.refresh),
+                          label: Text("Ressayer"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.indigo[400],
+                            shape: const BeveledRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5))),
+                            elevation: 5,
+                          ),
+                        ),
+                      ]),
       ),
     );
   }
