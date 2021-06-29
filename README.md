@@ -1,6 +1,6 @@
 # canpeches
 
-A new Flutter project.
+This is a school project
 
 ## Getting Started
 
